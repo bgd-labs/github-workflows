@@ -1,0 +1,20 @@
+# creates a new tag whenever a commit on `main` containing `chore(release)` appears
+name: release
+
+on:
+  workflow_call:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - id: tag
+        name: tag
+        if: |
+          github.ref == 'refs/heads/main' &&
+          contains(github.event.head_commit.message, 'chore(release)')
+        run: |
+          git tag v$(node -pe "require('./package.json').version")
+          git push origin v$(node -pe "require('./package.json').version")
