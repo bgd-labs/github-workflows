@@ -43,5 +43,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               head: 'release/${{ github.sha }}',
-              base: 'master'
+              base: '${{ github.event.repository.default_branch }}'
             })
