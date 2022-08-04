@@ -18,6 +18,9 @@ jobs:
         uses: foundry-rs/foundry-toolchain@v1
         with:
           version: nightly
+          
+      - name: Copy .env
+        run: cp .env.example .env
 
       - name: Run Forge build
         run: |
