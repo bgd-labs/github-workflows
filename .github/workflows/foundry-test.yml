@@ -27,9 +27,20 @@ jobs:
 
       - name: Run Forge build
         run: |
-          forge --version
-          forge build --sizes
+          version=$(forge --version)
+          echo $version
+          build=$(forge build --sizes)
+          echo $build
+          echo "::set-output name=version::$version"
+          echo "::set-output name=build::$build"
         id: build
+
+      - name: Run Forge tests
+        run: |
+          test=$(${{ inputs.testCommand }})
+          echo $test
+          echo "::set-output name=test::$test"
+        id: test
 
       - name: Find Comment
         uses: peter-evans/find-comment@v2
@@ -37,7 +48,7 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           comment-author: "github-actions[bot]"
-          body-includes: Build output
+          body-includes: Foundry report
 
       - name: Create or update comment
         uses: peter-evans/create-or-update-comment@v2
@@ -45,10 +56,8 @@ jobs:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            Build output
-            test
+            Foundry report
+            ${{ steps.build.outputs.version }}
+            ${{ steps.build.outputs.build }}
+            ${{ steps.test.outputs.test }}
           edit-mode: replace
-
-      - name: Run Forge tests
-        run: ${{ inputs.testCommand }}
-        id: test
