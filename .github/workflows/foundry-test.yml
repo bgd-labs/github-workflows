@@ -42,10 +42,10 @@ jobs:
       # comment on pr
       - id: get-comment-body
         run: |
-          echo "Foundry report\n\n" > /tmp/report.txt
-          echo "\`\`\`shell\n$(cat /tmp/foundry_version)\n\`\`\`\n" >> /tmp/report.txt
-          echo "\`\`\`shell\n$(cat /tmp/foundry_build)\n\`\`\`\n" >> /tmp/report.txt
-          echo "\`\`\`shell\n$(cat /tmp/foundry_test)\n\`\`\`"  >> /tmp/report.txt
+          printf "Foundry report\n\n" > /tmp/report.txt
+          printf "\`\`\`shell\n$(cat /tmp/foundry_version)\n\`\`\`\n" >> /tmp/report.txt
+          printf "\`\`\`shell\n$(cat /tmp/foundry_build)\n\`\`\`\n" >> /tmp/report.txt
+          printf "\`\`\`shell\n$(cat /tmp/foundry_test)\n\`\`\`"  >> /tmp/report.txt
           body="$(cat /tmp/report.txt)"
           body="${body//'%'/'%25'}"
           body="${body//$'\n'/'%0A'}"
