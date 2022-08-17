@@ -27,9 +27,8 @@ jobs:
 
       - name: Run Forge build
         run: |
-          version=$(forge --version)
-          echo $version
-          build=$(forge build --sizes)
+          forge --version | tee /tmp/foundry_version
+          forge build --sizes | tee /tmp/foundry_build
           echo $build
           echo "::set-output name=version::$version"
           echo "::set-output name=build::$build"
@@ -37,10 +36,17 @@ jobs:
 
       - name: Run Forge tests
         run: |
-          test=$(${{ inputs.testCommand }})
-          echo $test
-          echo "::set-output name=test::$test"
+          ${{ inputs.testCommand }} | tee /tmp/foundry_test
         id: test
+
+      # comment on pr
+      - id: get-comment-body
+        run: |
+          body="Foundry report\n\n\`\`\`shell\n$(cat /tmp/foundry_version)\n\`\`\`\n\`\`\`shell\n$(cat /tmp/foundry_build)\n\`\`\`\n\`\`\`shell\n$(cat /tmp/foundry_test)\n\`\`\`"
+          body="${body//'%'/'%25'}"
+          body="${body//$'\n'/'%0A'}"
+          body="${body//$'\r'/'%0D'}" 
+          echo "::set-output name=body::$body"
 
       - name: Find Comment
         uses: peter-evans/find-comment@v2
@@ -55,9 +61,5 @@ jobs:
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            Foundry report
-            ${{ steps.build.outputs.version }}
-            ${{ steps.build.outputs.build }}
-            ${{ steps.test.outputs.test }}
+          body: ${{ steps.get-comment-body.outputs.body }}
           edit-mode: replace
