@@ -2,6 +2,12 @@ name: foundry-test
 
 on:
   workflow_call:
+    inputs:
+      testCommand:
+        default: forge test -vvv
+        description: the command responsible for running the test
+        type: string
+        required: false
 
 jobs:
   test:
@@ -19,6 +25,8 @@ jobs:
         with:
           version: nightly
 
+      - name: Source env
+
       - name: Run Forge build
         run: |
           forge --version
@@ -26,6 +34,5 @@ jobs:
         id: build
 
       - name: Run Forge tests
-        run: |
-          forge test -vvv
+        run: ${{ inputs.testCommand }}
         id: test
