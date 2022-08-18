@@ -27,8 +27,8 @@ jobs:
 
       - name: Run Forge build
         run: |
-          forge --version | tee /tmp/foundry_version
-          forge build --sizes | tee /tmp/foundry_build
+          forge --version | tee /tmp/foundry_version ; test ${PIPESTATUS[0]} -eq 0
+          forge build --sizes | tee /tmp/foundry_build ; test ${PIPESTATUS[0]} -eq 0
           echo $build
           echo "::set-output name=version::$version"
           echo "::set-output name=build::$build"
@@ -36,7 +36,7 @@ jobs:
 
       - name: Run Forge tests
         run: |
-          ${{ inputs.testCommand }} | tee /tmp/foundry_test
+          ${{ inputs.testCommand }} | tee /tmp/foundry_test ; test ${PIPESTATUS[0]} -eq 0
         id: test
 
       # comment on pr
