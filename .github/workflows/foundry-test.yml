@@ -29,14 +29,12 @@ jobs:
         run: |
           forge --version | tee /tmp/foundry_version ; test ${PIPESTATUS[0]} -eq 0
           forge build --sizes | tee /tmp/foundry_build ; test ${PIPESTATUS[0]} -eq 0
-          echo $build
-          echo "::set-output name=version::$version"
-          echo "::set-output name=build::$build"
         id: build
 
       - name: Run Forge tests
         run: |
           ${{ inputs.testCommand }} | tee /tmp/foundry_test ; test ${PIPESTATUS[0]} -eq 0
+          echo "::set-output name=testStatus::${PIPESTATUS[0]}"
         id: test
 
       # comment on pr
@@ -67,3 +65,10 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           body: ${{ steps.get-comment-body.outputs.body }}
           edit-mode: replace
+
+      # we let failing tests pass so we can log them in the comment, still we want the ci to fail
+      - name: Post test
+        if: ${{ steps.test.outputs.testStatus == 0 }}
+        run: |
+          echo "tests failed"
+          exit 1
