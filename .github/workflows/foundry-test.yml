@@ -33,7 +33,7 @@ jobs:
 
       - name: Run Forge tests
         run: |
-          ${{ inputs.testCommand }} | tee /tmp/foundry_test ; test ${PIPESTATUS[0]} -eq 0
+          ${{ inputs.testCommand }} | tee /tmp/foundry_test
           echo "::set-output name=testStatus::${PIPESTATUS[0]}"
         id: test
 
@@ -43,7 +43,7 @@ jobs:
           printf "Foundry report\n\n" > /tmp/report.txt
           printf "\`\`\`shell\n$(cat /tmp/foundry_version)\n\`\`\`\n\n" >> /tmp/report.txt
           printf "\`\`\`shell\n$(cat /tmp/foundry_build)\n\`\`\`\n\n" >> /tmp/report.txt
-          printf "<details><summary>Test</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_test)\n\`\`\`\n</details>"  >> /tmp/report.txt
+          printf "<details><summary>Test ${{ steps.test.outputs.testStatus == 0 && 'success' || 'error'}}</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_test)\n\`\`\`\n</details>"  >> /tmp/report.txt
           body="$(cat /tmp/report.txt | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g')"
           body="${body//'%'/'%25'}"
           body="${body//$'\n'/'%0A'}"
