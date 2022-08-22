@@ -13,6 +13,12 @@ on:
         required: false
       RPC_POLYGON:
         required: false
+      RPC_AVALANCHE:
+        required: false
+      RPC_OPTIMISM:
+        required: false
+      RPC_ARBITRUM:
+        required: false
 
 jobs:
   test:
@@ -22,6 +28,9 @@ jobs:
       FOUNDRY_PROFILE: ci
       RPC_MAINNET: ${{ secrets.RPC_MAINNET }}
       RPC_POLYGON: ${{ secrets.RPC_POLYGON }}
+      RPC_AVALANCHE: ${{ secrets.RPC_AVALANCHE }}
+      RPC_OPTIMISM: ${{ secrets.RPC_OPTIMISM }}
+      RPC_ARBITRUM: ${{ secrets.RPC_ARBITRUM }}
     steps:
       - uses: actions/checkout@v3
         with:
