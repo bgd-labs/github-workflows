@@ -11,6 +11,8 @@ on:
     secrets:
       RPC_MAINNET:
         required: false
+      RPC_POLYGON:
+        required: false
 
 jobs:
   test:
@@ -19,6 +21,7 @@ jobs:
     env:
       FOUNDRY_PROFILE: ci
       RPC_MAINNET: ${{ secrets.RPC_MAINNET }}
+      RPC_POLYGON: ${{ secrets.RPC_POLYGON }}
     steps:
       - uses: actions/checkout@v3
         with:
