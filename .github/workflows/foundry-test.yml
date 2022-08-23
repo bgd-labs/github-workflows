@@ -36,6 +36,14 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Setup env
+        run: |
+          ${{ secrets.RPC_MAINNET != "" }} && echo "RPC_MAINNET=${{ secrets.RPC_MAINNET }}" >> $GITHUB_ENV
+          ${{ secrets.RPC_POLYGON != "" }} && echo "RPC_POLYGON=${{ secrets.RPC_POLYGON }}" >> $GITHUB_ENV
+          ${{ secrets.RPC_AVALANCHE != "" }} && echo "RPC_AVALANCHE=${{ secrets.RPC_AVALANCHE }}" >> $GITHUB_ENV
+          ${{ secrets.RPC_OPTIMISM != "" }} && echo "RPC_MAINNET=${{ secrets.RPC_OPTIMISM }}" >> $GITHUB_ENV
+          ${{ secrets.RPC_ARBITRUM != "" }} && echo "RPC_ARBITRUM=${{ secrets.RPC_ARBITRUM }}" >> $GITHUB_ENV
+
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
