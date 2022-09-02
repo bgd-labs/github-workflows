@@ -45,7 +45,8 @@ jobs:
           version: nightly
 
       - name: Copy .env
-        run: cp .env.example .env
+        run: |
+          cp .env.example .env 2> /dev/null || :
 
       - uses: actions/cache@v3
         with:
