@@ -53,12 +53,14 @@ jobs:
           path: |
             out/
             cache/
+            ~/.foundry/cache/
           key: ${{ runner.os }}-foundry-${{ github.sha }}
           restore-keys: ${{ runner.os }}-foundry-
 
       - name: Run Forge build
         run: |
           forge --version | tee /tmp/foundry_version ; test ${PIPESTATUS[0]} -eq 0
+          forge cache ls
           forge build --sizes | tee /tmp/foundry_build ; test ${PIPESTATUS[0]} -eq 0
         id: build
 
