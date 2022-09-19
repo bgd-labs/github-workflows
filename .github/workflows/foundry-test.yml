@@ -105,7 +105,7 @@ jobs:
 
       # we let failing tests pass so we can log them in the comment, still we want the ci to fail
       - name: Post test
-        if: ${{ steps.test.outputs.testStatus == 1 }}
+        if: ${{ steps.test.outputs.testStatus != 0 }}
         run: |
           echo "tests failed"
           exit 1
