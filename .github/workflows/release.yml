@@ -3,6 +3,12 @@ name: release
 
 on:
   workflow_call:
+    inputs:
+      npmRelease:
+        description: If set to true will try to automatically release on npm. Expects ci:publish to exist
+        default: false
+        type: boolean
+        required: false
 
 jobs:
   release:
@@ -19,3 +25,8 @@ jobs:
         run: |
           git tag v$(node -pe "require('./package.json').version")
           git push origin v$(node -pe "require('./package.json').version")
+
+      - id: npmRelease
+        if: ${{ inputs.npmRelease }} == true
+        run: |
+          echo "test"
