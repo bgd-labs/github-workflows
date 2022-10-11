@@ -27,4 +27,4 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Publish
-        run: yarn ci:publish
+        run: npm run ci:publish
