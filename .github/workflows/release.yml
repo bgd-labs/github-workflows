@@ -6,16 +6,16 @@ on:
 
 jobs:
   release:
+    if: |
+      github.event_name == 'push' &&
+      github.ref == format('refs/heads/{0}', github.event.repository.default_branch) &&
+      contains(github.event.head_commit.message, 'chore(release)')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
       - id: tag
         name: tag
-        if: |
-          github.event_name == 'push' &&
-          github.ref == format('refs/heads/{0}', github.event.repository.default_branch) &&
-          contains(github.event.head_commit.message, 'chore(release)')
         run: |
           git tag v$(node -pe "require('./package.json').version")
           git push origin v$(node -pe "require('./package.json').version")
