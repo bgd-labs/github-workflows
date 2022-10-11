@@ -9,6 +9,9 @@ on:
         default: false
         type: boolean
         required: false
+    secrets:
+      NPM_AUTH_TOKEN:
+        required: false
 
 jobs:
   release:
