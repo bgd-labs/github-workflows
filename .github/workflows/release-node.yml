@@ -28,3 +28,5 @@ jobs:
 
       - name: Publish
         run: npm run ci:publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
