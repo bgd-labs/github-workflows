@@ -11,6 +11,7 @@ The workflows can easily be used outside of BGD as well, as long as secrets are 
 - runs `forge build --sizes`
 - runs `forge test -vvv`
 - reports results in an automatically updated comment on the pr
+- caches fork snapshots for recurrent runs
 
 You can use the workflow via:
 
