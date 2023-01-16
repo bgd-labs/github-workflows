@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       testCommand:
-        default: forge test -vvv
+        default: forge test -vv
         description: the command responsible for running the test
         type: string
         required: false
@@ -73,8 +73,7 @@ jobs:
       # comment on pr
       - id: get-comment-body
         run: |
-          destdir=${{ runner.temp }}/report.txt
-          printf "Foundry report\n\n" > "$destdir"
+          printf "Foundry report\n\n" > /tmp/report.txt
           printf "\`\`\`shell\n$(cat /tmp/foundry_version)\n\`\`\`\n\n" >> /tmp/report.txt
           printf "<details><summary>Build log</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_build)\n\`\`\`\n</details>\n\n" >> /tmp/report.txt
           printf "<details><summary>Test ${{ steps.test.outputs.testStatus == 0 && 'success :rainbow:' || 'error :finnadie::x:'}}</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_test)\n\`\`\`\n</details>"  >> /tmp/report.txt
@@ -82,10 +81,7 @@ jobs:
           body="${body//'%'/'%25'}"
           body="${body//$'\n'/'%0A'}"
           body="${body//$'\r'/'%0D'}" 
-          if [ -f "$destdir" ]
-          then 
-              echo "$body" > "$destdir"
-          fi
+          echo "::set-output name=body::$body"
 
       - name: Find Comment
         uses: peter-evans/find-comment@v2
@@ -104,7 +100,7 @@ jobs:
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
-          body-file: ${{ runner.temp }}/report.txt
+          body: ${{ steps.get-comment-body.outputs.body }}
           edit-mode: replace
 
       # we let failing tests pass so we can log them in the comment, still we want the ci to fail
