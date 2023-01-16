@@ -73,7 +73,8 @@ jobs:
       # comment on pr
       - id: get-comment-body
         run: |
-          printf "Foundry report\n\n" > /tmp/report.txt
+          destdir=${{ runner.temp }}/report.txt
+          printf "Foundry report\n\n" > "$destdir"
           printf "\`\`\`shell\n$(cat /tmp/foundry_version)\n\`\`\`\n\n" >> /tmp/report.txt
           printf "<details><summary>Build log</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_build)\n\`\`\`\n</details>\n\n" >> /tmp/report.txt
           printf "<details><summary>Test ${{ steps.test.outputs.testStatus == 0 && 'success :rainbow:' || 'error :finnadie::x:'}}</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_test)\n\`\`\`\n</details>"  >> /tmp/report.txt
@@ -81,7 +82,10 @@ jobs:
           body="${body//'%'/'%25'}"
           body="${body//$'\n'/'%0A'}"
           body="${body//$'\r'/'%0D'}" 
-          echo "::set-output name=body::$body"
+          if [ -f "$destdir" ]
+          then 
+              echo "$body" > "$destdir"
+          fi
 
       - name: Find Comment
         uses: peter-evans/find-comment@v2
@@ -94,13 +98,13 @@ jobs:
           body-includes: Foundry report
 
       - name: Create or update comment
-        uses: peter-evans/create-or-update-comment@v2
+        uses: peter-evans/create-or-update-comment@v2.1
         if: |
           github.ref != format('refs/heads/{0}', github.event.repository.default_branch)
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
-          body: ${{ steps.get-comment-body.outputs.body }}
+          file: ${{ runner.temp }}/report.txt
           edit-mode: replace
 
       # we let failing tests pass so we can log them in the comment, still we want the ci to fail
