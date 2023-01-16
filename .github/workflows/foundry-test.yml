@@ -104,7 +104,7 @@ jobs:
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
-          file: ${{ runner.temp }}/report.txt
+          body-file: ${{ runner.temp }}/report.txt
           edit-mode: replace
 
       # we let failing tests pass so we can log them in the comment, still we want the ci to fail
