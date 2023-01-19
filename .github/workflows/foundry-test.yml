@@ -61,17 +61,18 @@ jobs:
           echo "testStatus=${PIPESTATUS[0]}" >> $GITHUB_ENV
         id: test
 
-      - name: Create template
+      - name: Create comment body
+        id: get-comment-body
         run: |
           echo "Foundry report\n\n" > /tmp/template.md
           echo "\`\`\`shell\n$(cat /tmp/foundry_version)\n\`\`\`\n\n" >> /tmp/template.md
           echo "<details><summary>Build log</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_build)\n\`\`\`\n</details>\n\n" >> /tmp/template.md
           echo "<details><summary>Test ${{ env.testStatus == 0 && 'success :rainbow:' || 'error :finnadie::x:'}}</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_test)\n\`\`\`\n</details>\n\n" >> /tmp/template.md
-          body="$(cat /tmp/template.md | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g')"
-          body="${body//'%'/'%25'}"
-          body="${body//$'\n'/'%0A'}"
-          body="${body//$'\r'/'%0D'}" 
-          echo "${body}" > /tmp/template.md
+          body="$(cat /tmp/template.md)"
+          delimiter="$(openssl rand -hex 8)"
+          echo "body<<$delimiter" >> $GITHUB_OUTPUT
+          echo $body >> $GITHUB_OUTPUT
+          echo $delimiter >> $GITHUB_OUTPUT
 
       - name: Find Comment
         uses: peter-evans/find-comment@v2
@@ -90,7 +91,7 @@ jobs:
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
-          body-file: /tmp/template.md
+          body: ${{ steps.get-comment-body.outputs.body }}
           edit-mode: replace
 
       # we let failing tests pass so we can log them in the comment, still we want the ci to fail
