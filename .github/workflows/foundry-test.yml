@@ -70,6 +70,20 @@ jobs:
           echo "testStatus=${PIPESTATUS[0]}" >> $GITHUB_ENV
         id: test
 
+      - name: Create template
+        run: |
+          echo "Foundry report\n\n" >> /tmp/template.md
+
+      - name: Render template
+        id: template
+        uses: chuhlomin/render-template@v1.4
+        with:
+          template: /tmp/template.md
+          vars: |
+            version: this
+            build: that
+            test:
+
       # comment on pr
       - id: get-comment-body
         run: |
@@ -100,7 +114,7 @@ jobs:
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
-          body: ${{ env.body }}
+          body: ${{ steps.template.outputs.result }}
           edit-mode: replace
 
       # we let failing tests pass so we can log them in the comment, still we want the ci to fail
