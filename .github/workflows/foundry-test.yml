@@ -48,15 +48,6 @@ jobs:
         run: |
           cp .env.example .env 2> /dev/null || :
 
-      - uses: actions/cache@v3
-        with:
-          path: |
-            out/
-            cache/
-            ~/.foundry/cache/
-          key: ${{ runner.os }}-foundry-${{ github.sha }}
-          restore-keys: ${{ runner.os }}-foundry-
-
       - name: Run Forge build
         run: |
           forge --version | tee /tmp/foundry_version ; test ${PIPESTATUS[0]} -eq 0
@@ -72,7 +63,10 @@ jobs:
 
       - name: Create template
         run: |
-          echo "Foundry report\n\n" >> /tmp/template.md
+          echo "Foundry report\n\n" > /tmp/template.md
+          echo "\`\`\`shell\n{{ .version }}\n\n" >> /tmp/template.md
+          echo "<details><summary>Build log</summary>\n\n\`\`\`shell\n{{ .buildLog }}\n\`\`\`\n</details>\n\n" >> /tmp/template.md
+          echo "<details><summary>Test {{ .testStatus }}</summary>\n\n\`\`\`shell\n{{ .testLog }}\n\`\`\`\n</details>\n\n" >> /tmp/template.md
 
       - name: Render template
         id: template
@@ -80,22 +74,10 @@ jobs:
         with:
           template: /tmp/template.md
           vars: |
-            version: this
-            build: that
-            test:
-
-      # comment on pr
-      - id: get-comment-body
-        run: |
-          printf "Foundry report\n\n" > /tmp/report.txt
-          printf "\`\`\`shell\n$(cat /tmp/foundry_version)\n\`\`\`\n\n" >> /tmp/report.txt
-          printf "<details><summary>Build log</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_build)\n\`\`\`\n</details>\n\n" >> /tmp/report.txt
-          printf "<details><summary>Test ${{ env.testStatus == 0 && 'success :rainbow:' || 'error :finnadie::x:'}}</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_test)\n\`\`\`\n</details>"  >> /tmp/report.txt
-          body="$(cat /tmp/report.txt | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g')"
-          #body="${body//'%'/'%25'}"
-          #body="${body//$'\n'/'%0A'}"
-          #body="${body//$'\r'/'%0D'}" 
-          echo "body=${body}" >> $GITHUB_ENV
+            version: $(cat /tmp/foundry_version)
+            buildLog: $(cat /tmp/foundry_build)
+            testStatus: ${{ env.testStatus == 0 && 'success :rainbow:' || 'error :finnadie::x:'}}
+            testLog: $(cat /tmp/foundry_test)
 
       - name: Find Comment
         uses: peter-evans/find-comment@v2
