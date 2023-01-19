@@ -12,7 +12,7 @@ on:
 
 jobs:
   test:
-    uses: .github/workflows/foundry-test.yml
+    uses: ./.github/workflows/foundry-test.yml
   release:
     needs: [test]
-    uses: .github/workflows/release.yml
+    uses: ./.github/workflows/release.yml

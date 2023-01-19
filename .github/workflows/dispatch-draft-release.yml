@@ -9,4 +9,4 @@ on:
 
 jobs:
   draft-release:
-    uses: .github/workflows/draft-release.yml
+    uses: ./.github/workflows/draft-release.yml
