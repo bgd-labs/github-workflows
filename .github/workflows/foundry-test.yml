@@ -64,10 +64,10 @@ jobs:
       - name: Create comment body
         id: get-comment-body
         run: |
-          echo "Foundry report%0A%0A" > /tmp/template.md
-          echo "\`\`\`shell%0A$(cat /tmp/foundry_version)%0A\`\`\`%0A%0A" >> /tmp/template.md
-          echo "<details><summary>Build log</summary>%0A%0A\`\`\`shell%0A$(cat /tmp/foundry_build)%0A\`\`\`%0A</details>%0A%0A" >> /tmp/template.md
-          echo "<details><summary>Test ${{ env.testStatus == 0 && 'success :rainbow:' || 'error :finnadie::x:'}}</summary>%0A%0A\`\`\`shell%0A$(cat /tmp/foundry_test)%0A\`\`\`%0A</details>%0A%0A" >> /tmp/template.md
+          echo "Foundry report\n\n" > /tmp/template.md
+          echo "\`\`\`shell\n$(cat /tmp/foundry_version)\n\`\`\`\n\n" >> /tmp/template.md
+          echo "<details><summary>Build log</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_build)\n\`\`\`\n</details>\n\n" >> /tmp/template.md
+          echo "<details><summary>Test ${{ env.testStatus == 0 && 'success :rainbow:' || 'error :finnadie::x:'}}</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_test)\n\`\`\`\n</details>\n\n" >> /tmp/template.md
           body="$(cat /tmp/template.md)"
           delimiter="$(openssl rand -hex 8)"
           echo "body<<$delimiter" >> $GITHUB_OUTPUT
