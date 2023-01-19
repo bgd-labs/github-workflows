@@ -64,7 +64,7 @@ jobs:
       - name: Create template
         run: |
           echo "Foundry report\n\n" > /tmp/template.md
-          echo "\`\`\`shell\n$(cat /tmp/foundry_version)\n\n" >> /tmp/template.md
+          echo "\`\`\`shell\n$(cat /tmp/foundry_version)\n\`\`\`\n\n" >> /tmp/template.md
           echo "<details><summary>Build log</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_build)\n\`\`\`\n</details>\n\n" >> /tmp/template.md
           echo "<details><summary>Test ${{ env.testStatus == 0 && 'success :rainbow:' || 'error :finnadie::x:'}}</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_test)\n\`\`\`\n</details>\n\n" >> /tmp/template.md
 
