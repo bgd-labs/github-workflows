@@ -32,13 +32,13 @@ jobs:
 
       - name: version
         id: version
-        run: echo ::set-output name=VERSION::$(node -pe "require('./package.json').version")
+        run: echo "version=$(node -pe "require('./package.json').version")" >> $GITHUB_ENV
 
       - uses: actions/github-script@v6
         with:
           script: |
             github.rest.pulls.create({
-              title: 'chore(release): release ${{ steps.version.outputs.VERSION }} :rocket: :tada:',
+              title: 'chore(release): release ${{ env.version }} :rocket: :tada:',
               body: 'Please review and refine the changelog carefully, before approving this pr.',
               owner: context.repo.owner,
               repo: context.repo.repo,
