@@ -78,9 +78,9 @@ jobs:
           printf "<details><summary>Build log</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_build)\n\`\`\`\n</details>\n\n" >> /tmp/report.txt
           printf "<details><summary>Test ${{ env.testStatus == 0 && 'success :rainbow:' || 'error :finnadie::x:'}}</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_test)\n\`\`\`\n</details>"  >> /tmp/report.txt
           body="$(cat /tmp/report.txt | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g')"
-          body="${body//'%'/'%25'}"
-          body="${body//$'\n'/'%0A'}"
-          body="${body//$'\r'/'%0D'}" 
+          #body="${body//'%'/'%25'}"
+          #body="${body//$'\n'/'%0A'}"
+          #body="${body//$'\r'/'%0D'}" 
           echo "body=${body}" >> $GITHUB_ENV
 
       - name: Find Comment
