@@ -64,20 +64,9 @@ jobs:
       - name: Create template
         run: |
           echo "Foundry report\n\n" > /tmp/template.md
-          echo "\`\`\`shell\n{{ .version }}\n\n" >> /tmp/template.md
-          echo "<details><summary>Build log</summary>\n\n\`\`\`shell\n{{ .buildLog }}\n\`\`\`\n</details>\n\n" >> /tmp/template.md
-          echo "<details><summary>Test {{ .testStatus }}</summary>\n\n\`\`\`shell\n{{ .testLog }}\n\`\`\`\n</details>\n\n" >> /tmp/template.md
-
-      - name: Render template
-        id: template
-        uses: chuhlomin/render-template@v1.4
-        with:
-          template: /tmp/template.md
-          vars: |
-            version: "$(cat /tmp/foundry_version)"
-            buildLog: "$(cat /tmp/foundry_build)"
-            testStatus: ${{ env.testStatus == 0 && 'success :rainbow:' || 'error :finnadie::x:'}}
-            testLog: "$(cat /tmp/foundry_test)"
+          echo "\`\`\`shell\n$(cat /tmp/foundry_version)\n\n" >> /tmp/template.md
+          echo "<details><summary>Build log</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_build)\n\`\`\`\n</details>\n\n" >> /tmp/template.md
+          echo "<details><summary>Test ${{ env.testStatus == 0 && 'success :rainbow:' || 'error :finnadie::x:'}}</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_test)\n\`\`\`\n</details>\n\n" >> /tmp/template.md
 
       - name: Find Comment
         uses: peter-evans/find-comment@v2
@@ -96,7 +85,7 @@ jobs:
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
-          body: ${{ steps.template.outputs.result }}
+          body-file: /tmp/template.md
           edit-mode: replace
 
       # we let failing tests pass so we can log them in the comment, still we want the ci to fail
