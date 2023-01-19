@@ -68,11 +68,6 @@ jobs:
           printf "\`\`\`shell\n$(cat /tmp/foundry_version)\n\`\`\`\n\n" >> /tmp/template.md
           printf "<details><summary>Build log</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_build)\n\`\`\`\n</details>\n\n" >> /tmp/template.md
           printf "<details><summary>Test ${{ env.testStatus == 0 && 'success :rainbow:' || 'error :finnadie::x:'}}</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_test)\n\`\`\`\n</details>\n\n" >> /tmp/template.md
-          body="$(cat /tmp/template.md)"
-          delimiter="$(openssl rand -hex 8)"
-          echo "body<<$delimiter" >> $GITHUB_OUTPUT
-          echo "$body" >> $GITHUB_OUTPUT
-          echo "$delimiter" >> $GITHUB_OUTPUT
 
       - name: Find Comment
         uses: peter-evans/find-comment@v2
@@ -91,7 +86,7 @@ jobs:
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
-          body: ${{ steps.get-comment-body.outputs.body }}
+          body-file: /tmp/template.md
           edit-mode: replace
 
       # we let failing tests pass so we can log them in the comment, still we want the ci to fail
