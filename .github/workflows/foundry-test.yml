@@ -70,9 +70,9 @@ jobs:
           echo "<details><summary>Test ${{ env.testStatus == 0 && 'success :rainbow:' || 'error :finnadie::x:'}}</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_test)\n\`\`\`\n</details>\n\n" >> /tmp/template.md
           body="$(cat /tmp/template.md)"
           delimiter="$(openssl rand -hex 8)"
-          echo "body<<$delimiter" >> $GITHUB_OUTPUT
-          echo $body >> $GITHUB_OUTPUT
-          echo $delimiter >> $GITHUB_OUTPUT
+          echo "body<<${delimiter}" >> "${GITHUB_OUTPUT}"
+          echo "${body}" >> "${GITHUB_OUTPUT}"
+          echo "${delimiter}" >> "${GITHUB_OUTPUT}"
 
       - name: Find Comment
         uses: peter-evans/find-comment@v2
