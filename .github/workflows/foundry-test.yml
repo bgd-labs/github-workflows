@@ -74,10 +74,10 @@ jobs:
         with:
           template: /tmp/template.md
           vars: |
-            version: $(cat /tmp/foundry_version)
-            buildLog: $(cat /tmp/foundry_build)
+            version: "$(cat /tmp/foundry_version)"
+            buildLog: "$(cat /tmp/foundry_build)"
             testStatus: ${{ env.testStatus == 0 && 'success :rainbow:' || 'error :finnadie::x:'}}
-            testLog: $(cat /tmp/foundry_test)
+            testLog: "$(cat /tmp/foundry_test)"
 
       - name: Find Comment
         uses: peter-evans/find-comment@v2
