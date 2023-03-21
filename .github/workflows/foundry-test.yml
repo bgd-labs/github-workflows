@@ -31,7 +31,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          token: ${{ secrets.AAVE_CROSS_CHAIN_INFRA_SSH_PRIVATE_KEY }}
           submodules: recursive
 
       - name: Setup env
