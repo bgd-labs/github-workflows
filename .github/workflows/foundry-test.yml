@@ -19,6 +19,8 @@ on:
         required: false
       RPC_ARBITRUM:
         required: false
+      AAVE_CROSS_CHAIN_INFRA_SSH_PRIVATE_KEY:
+        required: false
 
 jobs:
   test:
@@ -38,6 +40,7 @@ jobs:
           if [[ "${{ secrets.RPC_AVALANCHE }}" != "" ]] ; then echo "RPC_AVALANCHE=${{ secrets.RPC_AVALANCHE }}" >> $GITHUB_ENV ; fi
           if [[ "${{ secrets.RPC_OPTIMISM }}" != "" ]] ; then echo "RPC_OPTIMISM=${{ secrets.RPC_OPTIMISM }}" >> $GITHUB_ENV ; fi
           if [[ "${{ secrets.RPC_ARBITRUM }}" != "" ]] ; then echo "RPC_ARBITRUM=${{ secrets.RPC_ARBITRUM }}" >> $GITHUB_ENV ; fi
+          if [[ "${{ secrets.AAVE_CROSS_CHAIN_INFRA_SSH_PRIVATE_KEY }}" != "" ]] ; then echo "AAVE_CROSS_CHAIN_INFRA_SSH_PRIVATE_KEY=${{ secrets.AAVE_CROSS_CHAIN_INFRA_SSH_PRIVATE_KEY }}" >> $GITHUB_ENV ; fi
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
