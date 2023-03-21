@@ -29,6 +29,11 @@ jobs:
     env:
       FOUNDRY_PROFILE: ci
     steps:
+      - name: Give GitHub Actions access to Michael-F-Bryan/my-secret-repo
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.AAVE_CROSS_CHAIN_INFRA_SSH_PRIVATE_KEY }}
+
       - uses: actions/checkout@v3
         with:
           submodules: recursive
@@ -40,7 +45,6 @@ jobs:
           if [[ "${{ secrets.RPC_AVALANCHE }}" != "" ]] ; then echo "RPC_AVALANCHE=${{ secrets.RPC_AVALANCHE }}" >> $GITHUB_ENV ; fi
           if [[ "${{ secrets.RPC_OPTIMISM }}" != "" ]] ; then echo "RPC_OPTIMISM=${{ secrets.RPC_OPTIMISM }}" >> $GITHUB_ENV ; fi
           if [[ "${{ secrets.RPC_ARBITRUM }}" != "" ]] ; then echo "RPC_ARBITRUM=${{ secrets.RPC_ARBITRUM }}" >> $GITHUB_ENV ; fi
-#          if [[ "${{ secrets.AAVE_CROSS_CHAIN_INFRA_SSH_PRIVATE_KEY }}" != "" ]] ; then echo "AAVE_CROSS_CHAIN_INFRA_SSH_PRIVATE_KEY=${{ secrets.AAVE_CROSS_CHAIN_INFRA_SSH_PRIVATE_KEY }}" >> $GITHUB_ENV ; fi
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
