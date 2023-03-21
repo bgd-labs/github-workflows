@@ -59,7 +59,7 @@ jobs:
         run: |
           forge --version | tee /tmp/foundry_version ; test ${PIPESTATUS[0]} -eq 0
           forge cache ls
-          forge build --sizes | tee /tmp/foundry_build ; test ${PIPESTATUS[0]} -eq 0
+          forge build | tee /tmp/foundry_build ; test ${PIPESTATUS[0]} -eq 0
         id: build
 
       - name: Run Forge tests
