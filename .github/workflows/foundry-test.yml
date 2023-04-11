@@ -47,6 +47,15 @@ jobs:
       - name: Copy .env
         run: |
           cp .env.example .env 2> /dev/null || :
+          
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: "https://registry.npmjs.org"
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
 
       - name: Run Forge build
         run: |
