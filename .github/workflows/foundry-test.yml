@@ -19,6 +19,8 @@ on:
         required: false
       RPC_ARBITRUM:
         required: false
+      AAVE_CROSS_CHAIN_INFRA_SSH_PRIVATE_KEY:
+        required: false
 
 jobs:
   test:
@@ -27,6 +29,11 @@ jobs:
     env:
       FOUNDRY_PROFILE: ci
     steps:
+      - name: Give GitHub Actions access to bgd-labs/aave-crosschain-infra
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.AAVE_CROSS_CHAIN_INFRA_SSH_PRIVATE_KEY }}
+
       - uses: actions/checkout@v3
         with:
           submodules: recursive
@@ -61,7 +68,7 @@ jobs:
         run: |
           forge --version | tee /tmp/foundry_version ; test ${PIPESTATUS[0]} -eq 0
           forge cache ls
-          forge build --sizes | tee /tmp/foundry_build ; test ${PIPESTATUS[0]} -eq 0
+          forge build | tee /tmp/foundry_build ; test ${PIPESTATUS[0]} -eq 0
         id: build
 
       - name: Run Forge tests
