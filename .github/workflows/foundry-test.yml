@@ -19,6 +19,10 @@ on:
         required: false
       RPC_ARBITRUM:
         required: false
+      COMMENT_BOT_APP_ID:
+        required: true
+      COMMENT_BOT_PK:
+        required: true
 
 jobs:
   test:
@@ -27,6 +31,13 @@ jobs:
     env:
       FOUNDRY_PROFILE: ci
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.COMMENT_BOT_APP_ID }}
+          private_key: ${{ secrets.COMMENT_BOT_PK }}
+
       - uses: actions/checkout@v3
         with:
           submodules: recursive
@@ -47,7 +58,7 @@ jobs:
       - name: Copy .env
         run: |
           cp .env.example .env 2> /dev/null || :
-          
+
       - uses: actions/setup-node@v3
         with:
           node-version: 16
@@ -89,10 +100,11 @@ jobs:
           body-includes: Foundry report
 
       - name: Create or update comment
-        uses: peter-evans/create-or-update-comment@v2
+        uses: peter-evans/create-or-update-comment@c6c9a1a66007646a28c153e2a8580a5bad27bcfa
         if: |
           github.ref != format('refs/heads/{0}', github.event.repository.default_branch)
         with:
+          token: ${{ steps.generate-token.outputs.token }}
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body-file: /tmp/template.md
