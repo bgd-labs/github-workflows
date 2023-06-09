@@ -9,7 +9,8 @@ jobs:
     name: Comment Bot
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v3
+      # https://github.com/actions/download-artifact/issues/3 official actions doesn't support downloads from different workflows
+      - uses: dawidd6/action-download-artifact@246dbf436b23d7c49e21a7ab8204ca9ecd1fe615
         with:
           name: pr_number
           path: pr/pr_number.txt
@@ -18,7 +19,7 @@ jobs:
         id: get_pr_number
         run: echo "pr_number=$(cat pr/pr_number.txt)" >> $GITHUB_OUTPUT
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v3dawidd6/action-download-artifact@246dbf436b23d7c49e21a7ab8204ca9ecd1fe615
         with:
           name: ${{ steps.get_pr_number.outputs.pr_number }}
           path: /tmp/template.md
