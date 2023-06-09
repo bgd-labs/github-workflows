@@ -1,0 +1,35 @@
+name: comment-pr-results
+
+on:
+  workflow_call:
+
+jobs:
+  comment:
+    name: Comment Bot
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: ${{ github.event.number }}
+          path: /tmp/template.md
+
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        id: fc
+        if: |
+          github.ref != format('refs/heads/{0}', github.event.repository.default_branch)
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: "github-actions[bot]"
+          body-includes: Foundry report
+
+      - name: Create or update comment
+        uses: peter-evans/create-or-update-comment@c6c9a1a66007646a28c153e2a8580a5bad27bcfa
+        if: |
+          github.ref != format('refs/heads/{0}', github.event.repository.default_branch)
+        with:
+          token: ${{ github.token }}
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body-file: /tmp/template.md
+          edit-mode: replace
