@@ -82,19 +82,36 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: ${{ github.event.number }}
+          name: ${{ github.event.number || github.sha }}
           path: /tmp/template.md
 
       - name: Save PR number
+        if: github.event_name == 'pull_request'
         env:
           PR_NUMBER: ${{ github.event.number }}
         run: |
           mkdir -p ./pr
           echo $PR_NUMBER > ./pr/pr_number.txt
+
       - uses: actions/upload-artifact@v3
+        if: github.event_name == 'pull_request'
         with:
           name: pr_number
           path: pr/pr_number.txt
+
+      - name: Save SHA
+        if: github.event_name != 'pull_request'
+        env:
+          SHA: ${{ github.sha }}
+        run: |
+          mkdir -p ./sha
+          echo $SHA > ./sha/sha.txt
+
+      - uses: actions/upload-artifact@v3
+        if: github.event_name != 'pull_request'
+        with:
+          name: sha
+          path: sha/sha.txt
 
       # we let failing tests pass so we can log them in the comment, still we want the ci to fail
       - name: Post test
