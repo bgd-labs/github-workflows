@@ -52,7 +52,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
           registry-url: "https://registry.npmjs.org"
           cache: "yarn"
 
@@ -61,14 +61,14 @@ jobs:
 
       - name: Run Forge build
         run: |
-          forge --version | tee /tmp/foundry_version ; test ${PIPESTATUS[0]} -eq 0
+          forge --version | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' | tee /tmp/foundry_version ; test ${PIPESTATUS[0]} -eq 0
           forge cache ls
-          forge build --sizes | tee /tmp/foundry_build ; test ${PIPESTATUS[0]} -eq 0
+          forge build --sizes | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' | tee /tmp/foundry_build ; test ${PIPESTATUS[0]} -eq 0
         id: build
 
       - name: Run Forge tests
         run: |
-          ${{ inputs.testCommand }} | tee /tmp/foundry_test
+          ${{ inputs.testCommand }} | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' | tee /tmp/foundry_test
           echo "testStatus=${PIPESTATUS[0]}" >> $GITHUB_ENV
         id: test
 
