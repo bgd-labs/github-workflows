@@ -82,8 +82,19 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: ${{ github.event.pull_request.number }}
+          name: ${{ github.event.number }}
           path: /tmp/template.md
+
+      - name: Save PR number
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+        run: |
+          mkdir -p ./pr
+          echo $PR_NUMBER > ./pr/pr_number.txt
+      - uses: actions/upload-artifact@v3
+        with:
+          name: pr_number
+          path: pr/pr_number.txt
 
       # we let failing tests pass so we can log them in the comment, still we want the ci to fail
       - name: Post test

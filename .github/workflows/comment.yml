@@ -10,7 +10,16 @@ jobs:
     steps:
       - uses: actions/download-artifact@v3
         with:
-          name: ${{ github.event.pull_request.number }}
+          name: pr_number
+          path: pr/pr_number.txt
+
+      - name: Read pr number
+        id: get_pr_number
+        run: echo "pr_number=$(cat pr/pr_number.txt)" >> $GITHUB_OUTPUT
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: ${{ steps.get_pr_number.outputs.pr_number }}
           path: /tmp/template.md
 
       - name: Find Comment
