@@ -14,6 +14,7 @@ jobs:
         with:
           name: pr_number
           path: pr/pr_number.txt
+          run_id: ${{ github.event.workflow_run.id }}
 
       - name: Read pr number
         id: get_pr_number
@@ -23,6 +24,7 @@ jobs:
         with:
           name: ${{ steps.get_pr_number.outputs.pr_number }}
           path: /tmp/template.md
+          run_id: ${{ github.event.workflow_run.id }}
 
       - name: Find Comment
         uses: peter-evans/find-comment@v2
