@@ -1,3 +1,4 @@
+# By calling this ci via `workflow_call` from another ci it has permissions to comment on prs from forks
 name: comment-pr-results
 
 on:

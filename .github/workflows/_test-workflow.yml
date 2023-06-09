@@ -1,4 +1,5 @@
-name: Test workflow
+# Test seup used to test the ci within this repository
+name: Foundry test
 
 concurrency:
   group: ${{ github.workflow }}

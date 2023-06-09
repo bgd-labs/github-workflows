@@ -1,3 +1,4 @@
+# Test seup used to test the ci within this repository
 name: Comment Test Results
 
 concurrency:
@@ -6,7 +7,7 @@ concurrency:
 
 on:
   workflow_run:
-    workflows: [Test workflow]
+    workflows: [Foundry test]
     types:
       - completed
 
