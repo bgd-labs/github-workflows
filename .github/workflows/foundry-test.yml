@@ -80,26 +80,21 @@ jobs:
           printf "<details><summary>Build log</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_build)\n\`\`\`\n</details>\n\n" >> /tmp/template.md
           printf "<details><summary>Test ${{ env.testStatus == 0 && 'success :rainbow:' || 'error :finnadie::x:'}}</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_test)\n\`\`\`\n</details>\n\n" >> /tmp/template.md
 
-      - name: Find Comment
-        uses: peter-evans/find-comment@v2
-        id: fc
-        if: |
-          github.ref != format('refs/heads/{0}', github.event.repository.default_branch)
+      - uses: actions/upload-artifact@v3
         with:
-          issue-number: ${{ github.event.pull_request.number }}
-          comment-author: "github-actions[bot]"
-          body-includes: Foundry report
+          name: ${{ github.event.number }}
+          path: /tmp/template.md
 
-      - name: Create or update comment
-        uses: peter-evans/create-or-update-comment@c6c9a1a66007646a28c153e2a8580a5bad27bcfa
-        if: |
-          github.ref != format('refs/heads/{0}', github.event.repository.default_branch)
+      - name: Save PR number
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+        run: |
+          mkdir -p ./pr
+          echo $PR_NUMBER > ./pr/pr_number.txt
+      - uses: actions/upload-artifact@v3
         with:
-          token: ${{ secrets.COMMENT_PAT || github.token }}
-          comment-id: ${{ steps.fc.outputs.comment-id }}
-          issue-number: ${{ github.event.pull_request.number }}
-          body-file: /tmp/template.md
-          edit-mode: replace
+          name: pr_number
+          path: pr/pr_number.txt
 
       # we let failing tests pass so we can log them in the comment, still we want the ci to fail
       - name: Post test

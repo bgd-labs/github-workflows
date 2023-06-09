@@ -1,0 +1,11 @@
+{
+  "name": "github-workflows",
+  "version": "1.0.0",
+  "description": "This repository contains a collection of workflows that are used across BGD repositories. The workflows can easily be used outside of BGD as well, as long as secrets are properly setup.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT"
+}

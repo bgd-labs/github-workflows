@@ -1,0 +1,15 @@
+name: Comment Test Results
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+on:
+  workflow_run:
+    workflows: [Test workflow]
+    types:
+      - completed
+
+jobs:
+  test:
+    uses: ./.github/workflows/comment.yml
