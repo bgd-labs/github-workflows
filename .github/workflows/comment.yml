@@ -29,15 +29,33 @@ jobs:
       - name: Find Comment
         uses: peter-evans/find-comment@v2
         id: fc
+        if: ${{ steps.get_pr_number.outputs.pr_number != null }}
         with:
           issue-number: ${{ steps.get_pr_number.outputs.pr_number }}
           comment-author: "github-actions[bot]"
           body-includes: Foundry report
 
-      - name: Create or update comment
+      - name: Create or update pr comment
         uses: peter-evans/create-or-update-comment@c6c9a1a66007646a28c153e2a8580a5bad27bcfa
+        if: ${{ steps.get_pr_number.outputs.pr_number != null }}
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ steps.get_pr_number.outputs.pr_number }}
           body-file: tmp/template.md
           edit-mode: replace
+
+      - id: get-comment-body
+        if: ${{ steps.get_pr_number.outputs.pr_number == null }}
+        run: |
+          body="$(cat tmp/template.md)"
+          delimiter="$(openssl rand -hex 8)"
+          echo "body<<$delimiter" >> $GITHUB_OUTPUT
+          echo "$body" >> $GITHUB_OUTPUT
+          echo "$delimiter" >> $GITHUB_OUTPUT
+
+      - name: Create or update commit comment
+        uses: peter-evans/commit-comment@4a537e71b0d89d18c5534e8aaba515f828f7383b
+        if: ${{ steps.get_pr_number.outputs.pr_number == null }}
+        with:
+          sha: ${{ github.sha }}
+          body: ${{ steps.get-comment-body.outputs.body }}
