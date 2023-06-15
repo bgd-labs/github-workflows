@@ -82,7 +82,7 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: ${{ github.sha }}
+          name: ${{ github.event.pull_request.head.sha || github.sha }}
           path: /tmp/template.md
 
       - name: Save PR number

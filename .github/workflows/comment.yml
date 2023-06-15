@@ -58,5 +58,5 @@ jobs:
         uses: peter-evans/commit-comment@4a537e71b0d89d18c5534e8aaba515f828f7383b
         if: ${{ steps.get_pr_number.outputs.pr_number == null }}
         with:
-          sha: ${{ github.sha }}
+          sha: ${{ github.event.workflow_run.head_sha }}
           body: ${{ steps.get-comment-body.outputs.body }}
