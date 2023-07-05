@@ -31,10 +31,10 @@ jobs:
     env:
       FOUNDRY_PROFILE: ci
     steps:
-      - name: Give GitHub Actions access to bgd-labs/aave-crosschain-infra
-        uses: webfactory/ssh-agent@v0.5.4
-        with:
-          ssh-private-key: ${{ secrets.AAVE_CROSS_CHAIN_INFRA_SSH_PRIVATE_KEY }}
+#      - name: Give GitHub Actions access to bgd-labs/aave-crosschain-infra
+#        uses: webfactory/ssh-agent@v0.5.4
+#        with:
+#          ssh-private-key: ${{ secrets.AAVE_CROSS_CHAIN_INFRA_SSH_PRIVATE_KEY }}
 
       - name: Give GitHub Actions access to bgd-labs/aave-v3-factory
         uses: webfactory/ssh-agent@v0.5.4
