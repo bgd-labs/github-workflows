@@ -23,6 +23,8 @@ on:
         required: false
       FACTORY_SSH_PRIVATE_KEY:
         required: false
+      GOVERNANCE_V3_SSH_PRIVATE_KEY:
+        required: false
 
 jobs:
   test:
@@ -31,12 +33,13 @@ jobs:
     env:
       FOUNDRY_PROFILE: ci
     steps:
-      - name: Give GitHub Actions access to bgd-labs/aave-crosschain-infra and bgd-labs/aave-v3-factory
+      - name: Give GitHub Actions access to bgd-labs/aave-crosschain-infra, bgd-labs/aave-v3-factory and bgd-labs/aave-governance-v3-robot
         uses: webfactory/ssh-agent@v0.5.4
         with:
           ssh-private-key: |
             ${{ secrets.AAVE_CROSS_CHAIN_INFRA_SSH_PRIVATE_KEY }}
             ${{ secrets.FACTORY_SSH_PRIVATE_KEY }}
+            ${{ secrets.GOVERNANCE_V3_SSH_PRIVATE_KEY }}
 
       - uses: actions/checkout@v3
         with:
