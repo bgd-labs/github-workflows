@@ -33,6 +33,8 @@ jobs:
     env:
       FOUNDRY_PROFILE: ci
     steps:
+      - uses: actions/checkout@v3
+
       - name: Give GitHub Actions access to bgd-labs/aave-crosschain-infra, bgd-labs/aave-v3-factory and bgd-labs/aave-governance-v3-robot
         uses: webfactory/ssh-agent@v0.8.0
         with:
