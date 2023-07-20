@@ -25,6 +25,8 @@ on:
         required: false
       GOVERNANCE_V3_SSH_PRIVATE_KEY:
         required: false
+      ROBOT_SSH_KEY:
+        required: false
 
 jobs:
   test:
@@ -42,6 +44,7 @@ jobs:
             ${{ secrets.AAVE_CROSS_CHAIN_INFRA_SSH_PRIVATE_KEY }}
             ${{ secrets.FACTORY_SSH_PRIVATE_KEY }}
             ${{ secrets.GOVERNANCE_V3_SSH_PRIVATE_KEY }}
+            ${{ secrets.ROBOT_SSH_KEY }}
 
       - uses: actions/checkout@v3
         with:
