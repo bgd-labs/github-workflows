@@ -43,7 +43,7 @@ jobs:
           ref: ${{ inputs.ref }}
 
       - name: Setup env
-        uses: ./.github/actions/foundry-env.yml
+        uses: ./.github/foundry/env
         with:
           RPC_MAINNET: ${{secrets.RPC_MAINNET}}
           RPC_POLYGON: ${{secrets.RPC_POLYGON}}

@@ -2,21 +2,30 @@ name: "Foundry env"
 description: "Setting up foundry environment based on bgd style repos"
 inputs:
   RPC_MAINNET:
+    description: "RPC for mainnet"
   RPC_POLYGON:
+    description: "RPC for polygon"
   RPC_AVALANCHE:
+    description: "RPC for avalanche"
   RPC_OPTIMISM:
+    description: "RPC for optimism"
   RPC_ARBITRUM:
+    description: "RPC for arbitrum"
   RPC_METIS:
+    description: "RPC for metis"
   RPC_BASE:
+    description: "RPC for base"
 
 runs:
   using: "composite"
   steps:
     - name: Copy .env
+      shell: bash
       run: |
         cp .env.example .env 2> /dev/null || :
 
     - name: Setup env
+      shell: bash
       run: |
         if [[ "${{ inputs.RPC_MAINNET }}" != "" ]] ; then echo "RPC_MAINNET=${{ inputs.RPC_MAINNET }}" >> $GITHUB_ENV ; fi
         if [[ "${{ inputs.RPC_POLYGON }}" != "" ]] ; then echo "RPC_POLYGON=${{ inputs.RPC_POLYGON }}" >> $GITHUB_ENV ; fi
