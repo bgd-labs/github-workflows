@@ -97,7 +97,7 @@ jobs:
           path: /tmp/template.md
 
       - name: Save PR number
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
         env:
           PR_NUMBER: ${{ github.event.number }}
         run: |
@@ -105,7 +105,7 @@ jobs:
           echo $PR_NUMBER > ./pr/pr_number.txt
 
       - uses: actions/upload-artifact@v3
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
         with:
           name: pr_number
           path: pr/pr_number.txt
