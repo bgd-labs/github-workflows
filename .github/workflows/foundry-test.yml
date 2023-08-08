@@ -43,23 +43,20 @@ jobs:
           ref: ${{ inputs.ref }}
 
       - name: Setup env
-        run: |
-          if [[ "${{ secrets.RPC_MAINNET }}" != "" ]] ; then echo "RPC_MAINNET=${{ secrets.RPC_MAINNET }}" >> $GITHUB_ENV ; fi
-          if [[ "${{ secrets.RPC_POLYGON }}" != "" ]] ; then echo "RPC_POLYGON=${{ secrets.RPC_POLYGON }}" >> $GITHUB_ENV ; fi
-          if [[ "${{ secrets.RPC_AVALANCHE }}" != "" ]] ; then echo "RPC_AVALANCHE=${{ secrets.RPC_AVALANCHE }}" >> $GITHUB_ENV ; fi
-          if [[ "${{ secrets.RPC_OPTIMISM }}" != "" ]] ; then echo "RPC_OPTIMISM=${{ secrets.RPC_OPTIMISM }}" >> $GITHUB_ENV ; fi
-          if [[ "${{ secrets.RPC_ARBITRUM }}" != "" ]] ; then echo "RPC_ARBITRUM=${{ secrets.RPC_ARBITRUM }}" >> $GITHUB_ENV ; fi
-          if [[ "${{ secrets.RPC_METIS }}" != "" ]] ; then echo "RPC_METIS=${{ secrets.RPC_METIS }}" >> $GITHUB_ENV ; fi
-          if [[ "${{ secrets.RPC_BASE }}" != "" ]] ; then echo "RPC_BASE=${{ secrets.RPC_BASE }}" >> $GITHUB_ENV ; fi
+        uses: ./.github/foundry/env
+        with:
+          RPC_MAINNET: ${{secrets.RPC_MAINNET}}
+          RPC_POLYGON: ${{secrets.RPC_POLYGON}}
+          RPC_AVALANCHE: ${{secrets.RPC_AVALANCHE}}
+          RPC_OPTIMISM: ${{secrets.RPC_OPTIMISM}}
+          RPC_ARBITRUM: ${{secrets.RPC_ARBITRUM}}
+          RPC_METIS: ${{secrets.RPC_METIS}}
+          RPC_BASE: ${{secrets.RPC_BASE}}
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
           version: nightly
-
-      - name: Copy .env
-        run: |
-          cp .env.example .env 2> /dev/null || :
 
       - uses: actions/setup-node@v3
         with:
