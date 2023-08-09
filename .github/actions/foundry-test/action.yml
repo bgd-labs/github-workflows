@@ -39,7 +39,7 @@ runs:
         status=0
         for i in "${json_array[@]}"
         do
-          forge test --match-path $i -vv | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' | tee -a /tmp/foundry_test
+          forge test --match-path $i -vv </dev/null | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' | tee -a /tmp/foundry_test
           if [ ${PIPESTATUS[0]} -eq 1 ]
           then
             status=1
