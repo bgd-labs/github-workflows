@@ -12,6 +12,9 @@ on:
         default: ${{ github.ref }}
         type: string
         required: false
+      mode:
+        default: "ALL"
+        type: "string"
     secrets:
       RPC_MAINNET:
         required: false
@@ -41,6 +44,7 @@ jobs:
         with:
           submodules: recursive
           ref: ${{ inputs.ref }}
+          fetch-depth: 0
 
       - name: Setup env
         uses: bgd-labs/github-workflows/.github/actions/env@main
@@ -75,10 +79,9 @@ jobs:
         id: build
 
       - name: Run Forge tests
-        run: |
-          ${{ inputs.testCommand }} | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' | tee /tmp/foundry_test
-          echo "testStatus=${PIPESTATUS[0]}" >> $GITHUB_ENV
-        id: test
+        uses: bgd-labs/github-workflows/.github/actions/foundry-test@main
+        with:
+          MODE: ${{ inputs.mode }}
 
       - name: Create comment body
         id: get-comment-body
