@@ -25,15 +25,15 @@ runs:
         files: |
           src/**/*.t.sol
 
-    - name: Test Changed
-      if: ${{ inputs.MODE == 'CHANGED' }}
-      shell: bash
-      run: |
-        forge test -vv | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' | tee /tmp/foundry_test
-        echo "testStatus=${PIPESTATUS[0]}" >> $GITHUB_ENV
-
     - name: Run step if any *.md file(s) change
       if: ${{ inputs.MODE == 'CHANGED' && steps.changed-files.outputs.any_changed == 'true'}}
       shell: bash
       run: |
         cat .github/outputs/all_changed_files.json
+
+    - name: Test Changed
+      if: ${{ inputs.MODE == 'CHANGED' && steps.changed-files.outputs.any_changed == 'true' }}
+      shell: bash
+      run: |
+        forge test -vv | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' | tee /tmp/foundry_test
+        echo "testStatus=${PIPESTATUS[0]}" >> $GITHUB_ENV
