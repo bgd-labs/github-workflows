@@ -46,3 +46,4 @@ runs:
           fi
         done
         echo "testStatus=$status" >> $GITHUB_ENV
+        exit 0
