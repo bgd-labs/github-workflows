@@ -44,6 +44,7 @@ jobs:
         with:
           submodules: recursive
           ref: ${{ inputs.ref }}
+          fetch-depth: 0
 
       - name: Setup env
         uses: bgd-labs/github-workflows/.github/actions/env@main
