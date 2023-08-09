@@ -1,0 +1,39 @@
+name: "Foundry test"
+description: "Testing foundry repos"
+inputs:
+  MODE:
+    description: "Test ALL or CHANGED tests only"
+    default: "ALL"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Test All
+      if: ${{ inputs.MODE == 'ALL' }}
+      shell: bash
+      run: |
+        forge test -vv | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' | tee /tmp/foundry_test
+        echo "testStatus=${PIPESTATUS[0]}" >> $GITHUB_ENV
+
+    - name: Get all changed *.t.sol file(s)
+      if: ${{ inputs.MODE == 'CHANGED' }}
+      id: changed-files
+      uses: tj-actions/changed-files@f569b77fb1d9ad9f1a125757d7e9e07b1f320199
+      with:
+        json: true
+        write_output_files: true
+        files: |
+          src/**/*.t.sol
+
+    - name: Test Changed
+      if: ${{ inputs.MODE == 'CHANGED' }}
+      shell: bash
+      run: |
+        forge test -vv | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' | tee /tmp/foundry_test
+        echo "testStatus=${PIPESTATUS[0]}" >> $GITHUB_ENV
+
+    - name: Run step if any *.md file(s) change
+      if: ${{ inputs.MODE == 'CHANGED' && steps.changed-files.outputs.any_changed == 'true'}}
+      shell: bash
+      run: |
+        cat .github/outputs/all_changed_files.json

@@ -1,5 +1,5 @@
-name: "Foundry env"
-description: "Setting up foundry environment based on bgd style repos"
+name: "Env"
+description: "Setting up environment based on bgd style repos"
 inputs:
   RPC_MAINNET:
     description: "RPC for mainnet"
@@ -21,11 +21,13 @@ inputs:
 runs:
   using: "composite"
   steps:
+    # copy .env.example to .env for dotenv support
     - name: Copy .env
       shell: bash
       run: |
         cp .env.example .env 2> /dev/null || :
 
+    # overwrite rpc env with github config
     - name: Setup env
       shell: bash
       run: |
