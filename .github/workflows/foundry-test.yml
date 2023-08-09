@@ -79,7 +79,7 @@ jobs:
         id: build
 
       - name: Run Forge tests
-        uses: bgd-labs/github-workflows/.github/actions/foundry-test@feat/test-changed
+        uses: bgd-labs/github-workflows/.github/actions/foundry-test@main
         with:
           MODE: ${{ inputs.mode }}
 
