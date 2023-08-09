@@ -21,14 +21,13 @@ jobs:
     uses: bgd-labs/github-workflows/.github/workflows/foundry-test.yml@main
 ```
 
-Per default the workflow will assume your `.env.example` contains variables that are sufficient to run your tests. For advanced usage you can specify a custom `testCommand` and custom `RPCs`.
+Per default the workflow will assume your `.env.example` contains variables that are sufficient to run your tests. For advanced usage you can specify custom `RPCs`.
 
 ```yml
 jobs:
   test:
     uses: bgd-labs/github-workflows/.github/workflows/foundry-test.yml@main
-    with:
-      testCommand: make test
+    mode: ALL # or CHANGED
     # to inherit all secrets
     secrets: inherit
     # to inherit specific secrets

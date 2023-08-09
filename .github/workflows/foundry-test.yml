@@ -3,11 +3,6 @@ name: foundry-test
 on:
   workflow_call:
     inputs:
-      testCommand:
-        default: forge test -vv
-        description: the command responsible for running the test
-        type: string
-        required: false
       ref:
         default: ${{ github.ref }}
         type: string
