@@ -29,9 +29,9 @@ jobs:
 
       - name: release
         run: |
-          standard-version --prerelease ${{ github.head_ref || github.ref_name }} --skip.changelog --skip.commit --skip.tag
+          standard-version --prerelease ${{ github.sha }} --skip.changelog --skip.commit --skip.tag
 
       - name: Publish
-        run: npm run ci:publish
+        run: npm run ci:publish --tag beta
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
