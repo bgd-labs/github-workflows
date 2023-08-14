@@ -29,7 +29,7 @@ jobs:
 
       - name: release
         run: |
-          standard-version --prerelease ${{ github.head_ref || github.ref_name }}
+          standard-version --prerelease ${{ github.head_ref || github.ref_name }} --skip.changelog --skip.commit --skip.tag
 
       - name: Publish
         run: npm run ci:publish
