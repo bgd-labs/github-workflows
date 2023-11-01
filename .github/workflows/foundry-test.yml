@@ -25,6 +25,10 @@ on:
         required: false
       RPC_BASE:
         required: false
+      RPC_GNOSIS:
+        required: false
+      RPC_BNB:
+        required: false
       COMMENT_PAT:
         required: false
 
@@ -51,6 +55,8 @@ jobs:
           RPC_ARBITRUM: ${{secrets.RPC_ARBITRUM}}
           RPC_METIS: ${{secrets.RPC_METIS}}
           RPC_BASE: ${{secrets.RPC_BASE}}
+          RPC_GNOSIS: ${{secrets.RPC_GNOSIS}}
+          RPC_BNB: ${{secrets.RPC_BNB}}
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1

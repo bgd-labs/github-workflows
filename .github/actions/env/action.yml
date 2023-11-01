@@ -17,6 +17,10 @@ inputs:
     description: "RPC for base"
   RPC_FANTOM:
     description: "RPC for fantom"
+  RPC_BNB:
+    description: "RPC for bnb"
+  RPC_GNOSIS:
+    description: "RPC for gnosis"
 
 runs:
   using: "composite"
@@ -39,3 +43,5 @@ runs:
         if [[ "${{ inputs.RPC_METIS }}" != "" ]] ; then echo "RPC_METIS=${{ inputs.RPC_METIS }}" >> $GITHUB_ENV ; fi
         if [[ "${{ inputs.RPC_BASE }}" != "" ]] ; then echo "RPC_BASE=${{ inputs.RPC_BASE }}" >> $GITHUB_ENV ; fi
         if [[ "${{ inputs.RPC_FANTOM }}" != "" ]] ; then echo "RPC_FANTOM=${{ inputs.RPC_FANTOM }}" >> $GITHUB_ENV ; fi
+        if [[ "${{ inputs.RPC_BNB }}" != "" ]] ; then echo "RPC_BNB=${{ inputs.RPC_BNB }}" >> $GITHUB_ENV ; fi
+        if [[ "${{ inputs.RPC_GNOSIS }}" != "" ]] ; then echo "RPC_GNOSIS=${{ inputs.RPC_GNOSIS }}" >> $GITHUB_ENV ; fi
