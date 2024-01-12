@@ -3,6 +3,25 @@ name: test node
 
 on:
   workflow_call:
+    secrets:
+      RPC_MAINNET:
+        required: false
+      RPC_POLYGON:
+        required: false
+      RPC_AVALANCHE:
+        required: false
+      RPC_OPTIMISM:
+        required: false
+      RPC_ARBITRUM:
+        required: false
+      RPC_METIS:
+        required: false
+      RPC_BASE:
+        required: false
+      RPC_GNOSIS:
+        required: false
+      RPC_BNB:
+        required: false
 
 jobs:
   release:
@@ -18,6 +37,19 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+
+      - name: Setup env
+        uses: bgd-labs/github-workflows/.github/actions/env@main
+        with:
+          RPC_MAINNET: ${{secrets.RPC_MAINNET}}
+          RPC_POLYGON: ${{secrets.RPC_POLYGON}}
+          RPC_AVALANCHE: ${{secrets.RPC_AVALANCHE}}
+          RPC_OPTIMISM: ${{secrets.RPC_OPTIMISM}}
+          RPC_ARBITRUM: ${{secrets.RPC_ARBITRUM}}
+          RPC_METIS: ${{secrets.RPC_METIS}}
+          RPC_BASE: ${{secrets.RPC_BASE}}
+          RPC_GNOSIS: ${{secrets.RPC_GNOSIS}}
+          RPC_BNB: ${{secrets.RPC_BNB}}
 
       - name: Run tests
         run: yarn test
