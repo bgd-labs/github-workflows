@@ -21,6 +21,10 @@ inputs:
     description: "RPC for bnb"
   RPC_GNOSIS:
     description: "RPC for gnosis"
+  RPC_ZKEVM:
+    description: "RPC for polygon zk evm"
+  RPC_SCROLL:
+    description: "RPC for scroll"
 
 runs:
   using: "composite"
@@ -45,3 +49,5 @@ runs:
         if [[ "${{ inputs.RPC_FANTOM }}" != "" ]] ; then echo "RPC_FANTOM=${{ inputs.RPC_FANTOM }}" >> $GITHUB_ENV ; fi
         if [[ "${{ inputs.RPC_BNB }}" != "" ]] ; then echo "RPC_BNB=${{ inputs.RPC_BNB }}" >> $GITHUB_ENV ; fi
         if [[ "${{ inputs.RPC_GNOSIS }}" != "" ]] ; then echo "RPC_GNOSIS=${{ inputs.RPC_GNOSIS }}" >> $GITHUB_ENV ; fi
+        if [[ "${{ inputs.RPC_ZKEVM }}" != "" ]] ; then echo "RPC_ZKEVM=${{ inputs.RPC_ZKEVM }}" >> $GITHUB_ENV ; fi
+        if [[ "${{ inputs.RPC_SCROLL }}" != "" ]] ; then echo "RPC_SCROLL=${{ inputs.RPC_SCROLL }}" >> $GITHUB_ENV ; fi
