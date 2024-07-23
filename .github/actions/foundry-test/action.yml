@@ -18,7 +18,7 @@ runs:
     - name: Get all changed *.t.sol file(s)
       if: ${{ inputs.MODE == 'CHANGED' }}
       id: changed-files
-      uses: tj-actions/changed-files@f569b77fb1d9ad9f1a125757d7e9e07b1f320199
+      uses: tj-actions/changed-files@f79274f27befa7e1bf6d5eb1c4964c0f65cea226
       with:
         json: true
         write_output_files: true
