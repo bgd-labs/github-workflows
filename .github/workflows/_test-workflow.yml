@@ -16,6 +16,8 @@ jobs:
     uses: ./.github/workflows/foundry-test.yml
     with:
       MODE: "CHANGED"
+  test-all:
+    uses: ./.github/workflows/foundry-test.yml
   release:
     needs: [test]
     uses: ./.github/workflows/release.yml
