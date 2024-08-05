@@ -16,8 +16,11 @@ jobs:
     uses: ./.github/workflows/foundry-test.yml
     with:
       MODE: "CHANGED"
-  test-all:
+  test-zksync:
     uses: ./.github/workflows/foundry-test.yml
+    with:
+      MODE: "CHANGED"
+      zksync: true
   release:
     needs: [test]
     uses: ./.github/workflows/release.yml
