@@ -1,6 +1,6 @@
 [profile.default]
 src = 'src'
-test = 'tests'
+test = 'src/test'
 script = 'scripts'
 solc = '0.8.19'
 out = 'out'
