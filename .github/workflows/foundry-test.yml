@@ -68,6 +68,7 @@ jobs:
         uses: bgd-labs/foundry-zksync-toolchain@340cea9a42119d9a77a6bb0a8236d4311582b709
         with:
           version: nightly
+          cache: false
 
       - uses: actions/setup-node@v3
         with:
