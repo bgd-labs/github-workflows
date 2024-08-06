@@ -99,6 +99,7 @@ jobs:
         uses: bgd-labs/github-workflows/.github/actions/foundry-test@main
         with:
           MODE: ${{ inputs.mode }}
+          ROOT_DIR: ${{ inputs.zksync == true && 'zksync' || 'src' }}
 
       - name: Create comment body
         id: get-comment-body
