@@ -26,6 +26,8 @@ on:
         required: false
       RPC_SCROLL:
         required: false
+      RPC_ZKSYNC:
+        required: false
 
 jobs:
   release:
@@ -56,6 +58,7 @@ jobs:
           RPC_BNB: ${{secrets.RPC_BNB}}
           RPC_ZKEVM: ${{secrets.RPC_ZKEVM}}
           RPC_SCROLL: ${{secrets.RPC_SCROLL}}
+          RPC_ZKSYNC: ${{secrets.RPC_ZKSYNC}}
 
       - name: Run tests
         run: yarn test
