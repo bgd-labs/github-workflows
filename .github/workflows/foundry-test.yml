@@ -107,6 +107,7 @@ jobs:
         with:
           MODE: ${{ inputs.mode }}
           ROOT_DIR: ${{ inputs.ROOT_DIR }}
+          ZKSYNC: ${{ inputs.zksync }}
 
       - name: Create comment body
         id: get-comment-body
