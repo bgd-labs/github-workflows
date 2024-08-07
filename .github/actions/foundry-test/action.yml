@@ -20,7 +20,7 @@ runs:
       if: ${{ inputs.MODE == 'ALL' }}
       shell: bash
       run: |
-        ${{ inputs.ZKSYNC == 'true' && 'FOUNDRY_PROFILE=zksync' || '' }} forge test ${{ inputs.zksync == 'true' && '--zksync' || ''}} -vv | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' | tee /tmp/foundry_test
+        ${{ inputs.ZKSYNC == 'true' && 'FOUNDRY_PROFILE=zksync' || '' }} forge test ${{ inputs.zksync == 'true' && '--zksync' || ''}} -vvvvv | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' | tee /tmp/foundry_test
         echo "testStatus=${PIPESTATUS[0]}" >> $GITHUB_ENV
 
     - name: Get all changed *.t.sol file(s)
