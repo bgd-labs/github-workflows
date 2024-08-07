@@ -103,7 +103,7 @@ jobs:
         id: build
 
       - name: Run Forge tests
-        uses: bgd-labs/github-workflows/.github/actions/foundry-test@main
+        uses: bgd-labs/github-workflows/.github/actions/foundry-test@fix/zksync-test
         with:
           MODE: ${{ inputs.mode }}
           ROOT_DIR: ${{ inputs.ROOT_DIR }}
