@@ -28,6 +28,8 @@ on:
         required: false
       RPC_ZKSYNC:
         required: false
+      RPC_SEPOLIA:
+        required: false
 
 jobs:
   release:
@@ -59,6 +61,7 @@ jobs:
           RPC_ZKEVM: ${{secrets.RPC_ZKEVM}}
           RPC_SCROLL: ${{secrets.RPC_SCROLL}}
           RPC_ZKSYNC: ${{secrets.RPC_ZKSYNC}}
+          RPC_SEPOLIA: ${{secrets.RPC_SEPOLIA}}
 
       - name: Run tests
         run: yarn test

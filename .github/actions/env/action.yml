@@ -27,6 +27,8 @@ inputs:
     description: "RPC for scroll"
   RPC_ZKSYNC:
     description: "RPC for zksync"
+  RPC_SEPOLIA:
+    description: "RPC for sepolia"
 
 runs:
   using: "composite"
@@ -42,6 +44,7 @@ runs:
       shell: bash
       run: |
         if [[ "${{ inputs.RPC_MAINNET }}" != "" ]] ; then echo "RPC_MAINNET=${{ inputs.RPC_MAINNET }}" >> $GITHUB_ENV ; fi
+        if [[ "${{ inputs.RPC_SEPOLIA }}" != "" ]] ; then echo "RPC_SEPOLIA=${{ inputs.RPC_SEPOLIA }}" >> $GITHUB_ENV ; fi
         if [[ "${{ inputs.RPC_POLYGON }}" != "" ]] ; then echo "RPC_POLYGON=${{ inputs.RPC_POLYGON }}" >> $GITHUB_ENV ; fi
         if [[ "${{ inputs.RPC_AVALANCHE }}" != "" ]] ; then echo "RPC_AVALANCHE=${{ inputs.RPC_AVALANCHE }}" >> $GITHUB_ENV ; fi
         if [[ "${{ inputs.RPC_OPTIMISM }}" != "" ]] ; then echo "RPC_OPTIMISM=${{ inputs.RPC_OPTIMISM }}" >> $GITHUB_ENV ; fi
