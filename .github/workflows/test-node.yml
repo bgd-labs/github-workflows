@@ -64,7 +64,7 @@ jobs:
           RPC_SCROLL: ${{secrets.RPC_SCROLL}}
           RPC_ZKSYNC: ${{secrets.RPC_ZKSYNC}}
           RPC_SEPOLIA: ${{secrets.RPC_SEPOLIA}}
-          RPC_FANTOM: ${{secrents.RPC_FANTOM}}
+          RPC_FANTOM: ${{secrets.RPC_FANTOM}}
 
       - name: Run tests
         run: yarn test
