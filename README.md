@@ -3,6 +3,16 @@
 This repository contains a collection of workflows that are used across BGD repositories.
 The workflows can easily be used outside of BGD as well, as long as secrets are properly setup.
 
+## Setup Node/Bun
+
+Opinionated setup & install for node & bun.
+
+name: `bgd-labs/github-workflows/.github/actions/setup-node@main`
+
+- detects node-package-manager to be used (npm/pnpm/yarn) according to present lockfile
+- detects runtime-version to used
+- installs (prefers offline, freezes lockfile) & caches the dependencies for node
+
 ## Foundry test
 
 `foundry-test` workflow:
