@@ -39,14 +39,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 20
-          registry-url: "https://registry.npmjs.org"
-          cache: "yarn"
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+      - uses: ./.github/actions/setup-node@main
 
       - name: Setup env
         uses: bgd-labs/github-workflows/.github/actions/env@main
