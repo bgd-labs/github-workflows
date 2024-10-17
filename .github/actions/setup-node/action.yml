@@ -96,7 +96,7 @@ runs:
       if: ${{ env.PACKAGE_MANAGER == 'bun' }}
       shell: bash
       run: |
-        echo '//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN  }}' > ${{ github.workspace }}/.npmrc
+        echo '//registry.npmjs.org/:_authToken=${{ env.NODE_AUTH_TOKEN  }}' > ${{ github.workspace }}/.npmrc
 
     - name: Install (bun)
       if: ${{ env.PACKAGE_MANAGER == 'bun' }}
