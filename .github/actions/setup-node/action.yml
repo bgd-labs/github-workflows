@@ -94,4 +94,4 @@ runs:
     - name: Install (bun)
       if: ${{ env.PACKAGE_MANAGER == 'bun' }}
       shell: bash
-      run: bun --prefer-offline
+      run: bun install --prefer-offline
