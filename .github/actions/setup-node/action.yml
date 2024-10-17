@@ -1,0 +1,97 @@
+## should eventually move to bgd-labs/github-workflows
+
+name: "Setup Node'ish environment"
+description: "Sets up Node/Bun and installs the dependencies"
+
+runs:
+  using: "composite"
+  steps:
+    ### Node
+    - name: Determine Package-Manager (node)
+      shell: bash
+      run: |
+        if [ -f yarn.lock ]; then
+            echo "PACKAGE_MANAGER=yarn" >> $GITHUB_ENV
+        fi
+
+        if [ -f pnpm-lock.yaml ]; then
+            echo "PACKAGE_MANAGER=pnpm" >> $GITHUB_ENV
+        fi
+
+        if [ -f package-lock.json ]; then
+            echo "PACKAGE_MANAGER=npm" >> $GITHUB_ENV
+        fi
+
+        if [ -f bun.lockb ]; then 
+            echo "PACKAGE_MANAGER=bun" >> $GITHUB_ENV
+        fi
+
+    - name: Determine Runtime-Version (node)
+      if: ${{ env.PACKAGE_MANAGER != '' }}
+      shell: bash
+      run: |
+        if [ -f package.json ]; then
+          echo "NODE_VERSION_FILE=package.json" >> $GITHUB_ENV
+        fi
+
+        if [ -f .tool-versions ]; then
+          echo "NODE_VERSION_FILE=.tool-versions" >> $GITHUB_ENV
+        fi
+
+        if [ -f .node-version ]; then
+          echo "NODE_VERSION_FILE=.node-version" >> $GITHUB_ENV
+        fi
+
+        if [ -f .nvmrc ]; then
+          echo "NODE_VERSION_FILE=.nvmrc" >> $GITHUB_ENV
+        fi
+
+    - name: Setup Node.js
+      if: ${{ env.PACKAGE_MANAGER != '' }}
+      uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # pin@v4
+      with:
+        node-version-file: ${{ env.NODE_VERSION_FILE }}
+        cache: ${{ env.PACKAGE_MANAGER }}
+
+    - name: Install (yarn)
+      if: ${{ env.PACKAGE_MANAGER == 'yarn' }}
+      shell: bash
+      run: yarn install --frozen-lockfile --prefer-offline
+
+    - name: Install (npm)
+      if: ${{ env.PACKAGE_MANAGER == 'npm' }}
+      shell: bash
+      run: npm ci --prefer-offline --no-audit
+
+    - name: Install (pnpm)
+      if: ${{ env.PACKAGE_MANAGER == 'pnpm' }}
+      shell: bash
+      run: pnpm i --prefer-offline --no-audit
+
+    ### Bun
+    - name: Determine Runtime-Version (bun)
+      if: ${{ env.PACKAGE_MANAGER == 'bun' }}
+      shell: bash
+      run: |
+        if [ -f package.json ]; then
+          echo "BUN_VERSION_FILE=package.json" >> $GITHUB_ENV
+        fi
+
+        if [ -f .tool-versions ]; then
+          echo "BUN_VERSION_FILE=.tool-versions" >> $GITHUB_ENV
+        fi
+
+        if [ -f .bun-version ]; then
+          echo "BUN_VERSION_FILE=.bun-version" >> $GITHUB_ENV
+        fi
+
+    - name: Setup Bun
+      if: ${{ env.PACKAGE_MANAGER == 'bun' }}
+      uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # pin@v2
+      with:
+        bun-version-file: ${{ env.BUN_VERSION_FILE }}
+
+    - name: Install (bun)
+      if: ${{ env.PACKAGE_MANAGER == 'bun' }}
+      shell: bash
+      run: bun --prefer-offline
