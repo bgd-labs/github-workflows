@@ -51,7 +51,7 @@ runs:
       uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # pin@v4
       with:
         node-version-file: ${{ env.NODE_VERSION_FILE }}
-        cache: ${{ env.PACKAGE_MANAGER }}
+        cache: ${{ env.PACKAGE_MANAGER != 'bun' || env.PACKAGE_MANAGER }}
 
     - name: Install (yarn)
       if: ${{ env.PACKAGE_MANAGER == 'yarn' }}
@@ -90,13 +90,6 @@ runs:
       uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # pin@v2
       with:
         bun-version-file: ${{ env.BUN_VERSION_FILE }}
-
-    # Node setup does this internally but bun does not
-    - name: Add .npmrc
-      if: ${{ env.PACKAGE_MANAGER == 'bun' }}
-      shell: bash
-      run: |
-        echo '//registry.npmjs.org/:_authToken=${{ env.NODE_AUTH_TOKEN  }}' > ${{ github.workspace }}/.npmrc
 
     - name: Install (bun)
       if: ${{ env.PACKAGE_MANAGER == 'bun' }}
