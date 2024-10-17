@@ -22,7 +22,7 @@ runs:
             echo "PACKAGE_MANAGER=npm" >> $GITHUB_ENV
         fi
 
-        if [ -f bun.lockb ]; then 
+        if [ -f bun.lockb ]; then
             echo "PACKAGE_MANAGER=bun" >> $GITHUB_ENV
         fi
 
@@ -90,6 +90,13 @@ runs:
       uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # pin@v2
       with:
         bun-version-file: ${{ env.BUN_VERSION_FILE }}
+
+    # Node setup does this internally but bun does not
+    - name: Add .npmrc
+      if: ${{ env.PACKAGE_MANAGER == 'bun' }}
+      shell: bash
+      run: |
+        echo '//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN  }}' > ${{ github.workspace }}/.npmrc
 
     - name: Install (bun)
       if: ${{ env.PACKAGE_MANAGER == 'bun' }}
