@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: ./.github/actions/setup-node
+      - uses: bgd-labs/github-workflows/.github/actions/setup-node
 
       - name: install standard
         run: npm i -g standard-version

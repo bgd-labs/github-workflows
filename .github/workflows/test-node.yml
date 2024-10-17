@@ -39,7 +39,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: ./.github/actions/setup-node
+      - uses: bgd-labs/github-workflows/.github/actions/setup-node
 
       - name: Setup env
         uses: bgd-labs/github-workflows/.github/actions/env@main

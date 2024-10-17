@@ -86,7 +86,7 @@ jobs:
         with:
           version: nightly
 
-      - uses: ./.github/actions/setup-node
+      - uses: bgd-labs/github-workflows/.github/actions/setup-node
 
       - name: Run Forge build
         run: |
