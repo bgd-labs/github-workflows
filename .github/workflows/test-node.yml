@@ -39,25 +39,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: bgd-labs/github-workflows/.github/actions/setup-node
+      - uses: bgd-labs/github-workflows/.github/actions/setup-node@main
 
-      - name: Setup env
-        uses: bgd-labs/github-workflows/.github/actions/env@main
+      - uses: bgd-labs/action-rpc-env@main
         with:
-          RPC_MAINNET: ${{secrets.RPC_MAINNET}}
-          RPC_POLYGON: ${{secrets.RPC_POLYGON}}
-          RPC_AVALANCHE: ${{secrets.RPC_AVALANCHE}}
-          RPC_OPTIMISM: ${{secrets.RPC_OPTIMISM}}
-          RPC_ARBITRUM: ${{secrets.RPC_ARBITRUM}}
-          RPC_METIS: ${{secrets.RPC_METIS}}
-          RPC_BASE: ${{secrets.RPC_BASE}}
-          RPC_GNOSIS: ${{secrets.RPC_GNOSIS}}
-          RPC_BNB: ${{secrets.RPC_BNB}}
-          RPC_ZKEVM: ${{secrets.RPC_ZKEVM}}
-          RPC_SCROLL: ${{secrets.RPC_SCROLL}}
-          RPC_ZKSYNC: ${{secrets.RPC_ZKSYNC}}
-          RPC_SEPOLIA: ${{secrets.RPC_SEPOLIA}}
-          RPC_FANTOM: ${{secrets.RPC_FANTOM}}
+          ALCHEMY_API_KEY: ${{ secrets.ALCHEMY_API_KEY }}
 
       - name: Run tests
-        run: yarn test
+        run: npm run test
