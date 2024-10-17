@@ -47,7 +47,6 @@ runs:
         fi
 
     - name: Setup Node.js
-      if: ${{ env.PACKAGE_MANAGER != 'bun' }}
       uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # pin@v4
       with:
         node-version-file: ${{ env.NODE_VERSION_FILE }}
