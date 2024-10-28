@@ -20,6 +20,6 @@ jobs:
       - uses: bgd-labs/github-workflows/.github/actions/setup-node@main
 
       - name: Publish
-        run: npm run ci:publish
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
