@@ -19,6 +19,9 @@ jobs:
 
       - uses: bgd-labs/github-workflows/.github/actions/setup-node@main
 
+      - name: Run build
+        run: npm run build
+
       - name: Publish
         run: npm publish
         env:
