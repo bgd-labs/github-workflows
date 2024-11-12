@@ -9,54 +9,42 @@ jobs:
     name: Comment Bot
     runs-on: ubuntu-latest
     steps:
-      # https://github.com/actions/download-artifact/issues/3 official actions doesn't support downloads from different workflows
-      - uses: dawidd6/action-download-artifact@246dbf436b23d7c49e21a7ab8204ca9ecd1fe615
+      - uses: actions/download-artifact@v4
         with:
-          name: pr_number
-          path: pr/
-          run_id: ${{ github.event.workflow_run.id }}
-          if_no_artifact_found: ignore
+          name: content
+          path: /tmp/content
+          run-id: ${{ github.event.workflow_run.id }}
 
       - name: Read pr number
         id: get_pr_number
-        run: echo "pr_number=$(cat pr/pr_number.txt)" >> $GITHUB_OUTPUT
+        run: |
+          echo "pr_number=$(cat /tmp/content/pr_number.txt)" >> $GITHUB_OUTPUT
+          rm /tmp/content/pr_number.txt
 
-      - uses: dawidd6/action-download-artifact@246dbf436b23d7c49e21a7ab8204ca9ecd1fe615
-        with:
-          name: ${{ github.event.workflow_run.head_sha }}
-          path: tmp/
-          run_id: ${{ github.event.workflow_run.id }}
+      - name: Combine
+        id: combine
+        run: cat /tmp/contents/*.txt > /tmp/all.txt
 
       - name: Find Comment
-        uses: peter-evans/find-comment@v2
+        uses: peter-evans/find-comment@v3
         id: fc
         if: ${{ steps.get_pr_number.outputs.pr_number != null }}
         with:
           issue-number: ${{ steps.get_pr_number.outputs.pr_number }}
           comment-author: "github-actions[bot]"
-          body-includes: Foundry report
 
       - name: Create or update pr comment
-        uses: peter-evans/create-or-update-comment@c6c9a1a66007646a28c153e2a8580a5bad27bcfa
+        uses: peter-evans/create-or-update-comment@v4
         if: ${{ steps.get_pr_number.outputs.pr_number != null }}
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ steps.get_pr_number.outputs.pr_number }}
-          body-file: tmp/template.md
+          body-file: /tmp/all.txt
           edit-mode: replace
 
-      - id: get-comment-body
-        if: ${{ steps.get_pr_number.outputs.pr_number == null }}
-        run: |
-          body="$(cat tmp/template.md)"
-          delimiter="$(openssl rand -hex 8)"
-          echo "body<<$delimiter" >> $GITHUB_OUTPUT
-          echo "$body" >> $GITHUB_OUTPUT
-          echo "$delimiter" >> $GITHUB_OUTPUT
-
       - name: Create or update commit comment
-        uses: peter-evans/commit-comment@4a537e71b0d89d18c5534e8aaba515f828f7383b
+        uses: peter-evans/commit-comment@v3
         if: ${{ steps.get_pr_number.outputs.pr_number == null }}
         with:
           sha: ${{ github.event.workflow_run.head_sha }}
-          body: ${{ steps.get-comment-body.outputs.body }}
+          body-file: /tmp/all.txt
