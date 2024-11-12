@@ -14,6 +14,7 @@ jobs:
           name: content
           path: /tmp/content
           run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.READ_ONLY_PAT }}
 
       - name: Read pr number
         id: get_pr_number
