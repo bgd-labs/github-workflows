@@ -120,11 +120,6 @@ jobs:
         if: ${{ inputs.mode == 'ALL'}}
         uses: bgd-labs/github-workflows/.github/actions/foundry-gas-report@main
 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: ${{ github.event.pull_request.head.sha || github.sha }}
-          path: /tmp/content/content.txt
-
       - name: Save PR number
         if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
         env:
