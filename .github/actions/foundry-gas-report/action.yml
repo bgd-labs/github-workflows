@@ -39,12 +39,13 @@ runs:
         ROOT_REPORT_PATH: "cache/gas.backup.json"
         # The path to the second contract to compare
         REPORT_PATH: "cache/gas.json"
+        ignoreUnchanged: "true"
 
     - name: Prepare comment
       shell: bash
       run: |
         printf ":fuelpump: **Gas report**\n\n" > /tmp/template.md
-        printf "${{ steps.gas.outputs.gas-report }}" >> /tmp/template.md
+        printf '%s' "${{ steps.gas.outputs.gas-report }}" >> /tmp/template.md
 
     - name: Find Comment
       uses: peter-evans/find-comment@v3
@@ -52,7 +53,7 @@ runs:
       with:
         issue-number: ${{ github.event.pull_request.number }}
         comment-author: "github-actions[bot]"
-        body-includes: ":fuelpump: Gas report"
+        body-includes: "Gas report"
 
     - name: Create or update comment
       uses: peter-evans/create-or-update-comment@v4
