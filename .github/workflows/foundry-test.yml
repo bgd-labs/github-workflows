@@ -18,31 +18,7 @@ on:
         default: "src"
         type: "string"
     secrets:
-      RPC_MAINNET:
-        required: false
-      RPC_POLYGON:
-        required: false
-      RPC_AVALANCHE:
-        required: false
-      RPC_OPTIMISM:
-        required: false
-      RPC_ARBITRUM:
-        required: false
-      RPC_METIS:
-        required: false
-      RPC_BASE:
-        required: false
-      RPC_GNOSIS:
-        required: false
-      RPC_BNB:
-        required: false
-      RPC_ZKEVM:
-        required: false
-      RPC_SCROLL:
-        required: false
-      RPC_ZKSYNC:
-        required: false
-      COMMENT_PAT:
+      ALCHEMY_API_KEY:
         required: false
       READ_ONLY_PAT:
         required: false
@@ -67,22 +43,11 @@ jobs:
           name: content
           path: /tmp/content
           run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.READ_ONLY_PAT || github.token }}
 
-      - name: Setup env
-        uses: bgd-labs/github-workflows/.github/actions/env@main
+      - uses: bgd-labs/action-rpc-env@main
         with:
-          RPC_MAINNET: ${{secrets.RPC_MAINNET}}
-          RPC_POLYGON: ${{secrets.RPC_POLYGON}}
-          RPC_AVALANCHE: ${{secrets.RPC_AVALANCHE}}
-          RPC_OPTIMISM: ${{secrets.RPC_OPTIMISM}}
-          RPC_ARBITRUM: ${{secrets.RPC_ARBITRUM}}
-          RPC_METIS: ${{secrets.RPC_METIS}}
-          RPC_BASE: ${{secrets.RPC_BASE}}
-          RPC_GNOSIS: ${{secrets.RPC_GNOSIS}}
-          RPC_BNB: ${{secrets.RPC_BNB}}
-          RPC_ZKEVM: ${{secrets.RPC_ZKEVM}}
-          RPC_SCROLL: ${{secrets.RPC_SCROLL}}
-          RPC_ZKSYNC: ${{secrets.RPC_ZKSYNC}}
+          ALCHEMY_API_KEY: ${{ secrets.ALCHEMY_API_KEY }}
 
       - name: Install Foundry
         if: ${{ !inputs.zksync }}
