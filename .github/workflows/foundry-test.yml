@@ -55,11 +55,19 @@ jobs:
     env:
       FOUNDRY_PROFILE: ci
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
           ref: ${{ inputs.ref }}
           token: ${{ secrets.READ_ONLY_PAT || github.token }}
+
+      # download is unnecessary, but done to prevent errors with parallel jobs
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: content
+          path: /tmp/content
+          run-id: ${{ github.event.workflow_run.id }}
 
       - name: Setup env
         uses: bgd-labs/github-workflows/.github/actions/env@main
@@ -111,10 +119,10 @@ jobs:
       - name: Create comment body
         id: get-comment-body
         run: |
-          printf "Foundry report\n\n" > /tmp/content/content.txt
-          printf "\`\`\`shell\n$(cat /tmp/foundry_version)\n\`\`\`\n\n" >> /tmp/content/content.txt
-          printf "<details><summary>Build log</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_build)\n\`\`\`\n</details>\n\n" >> /tmp/content/content.txt
-          printf "<details><summary>Test ${{ env.testStatus == 0 && 'success :rainbow:' || 'error :finnadie::x:'}}</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_test)\n\`\`\`\n</details>\n\n" >> /tmp/content/content.txt
+          printf "Foundry report\n\n" > /tmp/content/content${{ inputs.zksync && '_zksync' || '' }}.txt
+          printf "\`\`\`shell\n$(cat /tmp/foundry_version)\n\`\`\`\n\n" >> /tmp/content/content${{ inputs.zksync && '_zksync' || '' }}.txt
+          printf "<details><summary>Build log</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_build)\n\`\`\`\n</details>\n\n" >> /tmp/content/content${{ inputs.zksync && '_zksync' || '' }}.txt
+          printf "<details><summary>Test ${{ env.testStatus == 0 && 'success :rainbow:' || 'error :finnadie::x:'}}</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_test)\n\`\`\`\n</details>\n\n" >> /tmp/content/content${{ inputs.zksync && '_zksync' || '' }}.txt
 
       - name: Run Gas report
         if: ${{ inputs.mode == 'ALL'}}
@@ -133,6 +141,8 @@ jobs:
         with:
           name: content
           path: /tmp/content
+          # overwrite as we sometimes run this job multiple times (once for zksync, once for the rest)
+          overwrite: true
 
       # we let failing tests pass so we can log them in the comment, still we want the ci to fail
       - name: Post test
