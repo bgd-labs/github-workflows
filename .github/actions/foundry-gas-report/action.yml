@@ -40,6 +40,12 @@ runs:
         # The path to the second contract to compare
         REPORT_PATH: "cache/gas.json"
 
+    - name: Prepare comment
+      shell: bash
+      run: |
+        printf ":fuelpump: **Gas report**\n\n" > /tmp/template.md
+        printf "${{ steps.gas.outputs.gas-report }}" >> /tmp/template.md
+
     - name: Find Comment
       uses: peter-evans/find-comment@v3
       id: fc
@@ -53,9 +59,7 @@ runs:
       with:
         comment-id: ${{ steps.fc.outputs.comment-id }}
         issue-number: ${{ github.event.pull_request.number }}
-        body: |
-          :fuelpump: Gas report
-          ${{ steps.gas.outputs.gas-report }}
+        body-path: /tmp/template.md
         edit-mode: replace
 
     - name: Cache Save
