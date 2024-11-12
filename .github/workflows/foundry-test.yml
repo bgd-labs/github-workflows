@@ -59,7 +59,6 @@ jobs:
         with:
           submodules: recursive
           ref: ${{ inputs.ref }}
-          token: ${{ secrets.READ_ONLY_PAT || github.token }}
 
       # download is unnecessary, but done to prevent errors with parallel jobs
       - uses: actions/download-artifact@v4
