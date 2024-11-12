@@ -44,6 +44,9 @@ on:
         required: false
       COMMENT_PAT:
         required: false
+      READ_ONLY_PAT:
+        required: false
+        description: "If supplied PAT will be used for git checkout"
 
 jobs:
   test:
@@ -56,7 +59,7 @@ jobs:
         with:
           submodules: recursive
           ref: ${{ inputs.ref }}
-          fetch-depth: 0
+          token: ${{ secrets.READ_ONLY_PAT || github.token }}
 
       - name: Setup env
         uses: bgd-labs/github-workflows/.github/actions/env@main
