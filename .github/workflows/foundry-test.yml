@@ -102,18 +102,24 @@ jobs:
           ROOT_DIR: ${{ inputs.ROOT_DIR }}
           ZKSYNC: ${{ inputs.zksync }}
 
+      - name: Make empty dir
+        run: mkdir -p /tmp/content
+
       - name: Create comment body
         id: get-comment-body
         run: |
-          printf "Foundry report\n\n" > /tmp/template.md
-          printf "\`\`\`shell\n$(cat /tmp/foundry_version)\n\`\`\`\n\n" >> /tmp/template.md
-          printf "<details><summary>Build log</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_build)\n\`\`\`\n</details>\n\n" >> /tmp/template.md
-          printf "<details><summary>Test ${{ env.testStatus == 0 && 'success :rainbow:' || 'error :finnadie::x:'}}</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_test)\n\`\`\`\n</details>\n\n" >> /tmp/template.md
+          printf "Foundry report\n\n" > /tmp/content/content.txt
+          printf "\`\`\`shell\n$(cat /tmp/foundry_version)\n\`\`\`\n\n" >> /tmp/content/content.txt
+          printf "<details><summary>Build log</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_build)\n\`\`\`\n</details>\n\n" >> /tmp/content/content.txt
+          printf "<details><summary>Test ${{ env.testStatus == 0 && 'success :rainbow:' || 'error :finnadie::x:'}}</summary>\n\n\`\`\`shell\n$(cat /tmp/foundry_test)\n\`\`\`\n</details>\n\n" >> /tmp/content/content.txt
 
-      - uses: actions/upload-artifact@v3
+      - name: Run Gas report
+        uses: bgd-labs/github-workflows/.github/actions/foundry-gas-report@main
+
+      - uses: actions/upload-artifact@v4
         with:
           name: ${{ github.event.pull_request.head.sha || github.sha }}
-          path: /tmp/template.md
+          path: /tmp/content/content.txt
 
       - name: Save PR number
         if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
@@ -121,13 +127,13 @@ jobs:
           PR_NUMBER: ${{ github.event.number }}
         run: |
           mkdir -p ./pr
-          echo $PR_NUMBER > ./pr/pr_number.txt
+          echo $PR_NUMBER > /tmp/content/pr_number.txt
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
         with:
-          name: pr_number
-          path: pr/pr_number.txt
+          name: content
+          path: /tmp/content
 
       # we let failing tests pass so we can log them in the comment, still we want the ci to fail
       - name: Post test

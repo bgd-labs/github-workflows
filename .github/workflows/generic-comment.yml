@@ -1,0 +1,50 @@
+# By calling this ci via `workflow_call` from another ci it has permissions to comment on prs from forks
+name: comment-pr-results
+
+on:
+  workflow_call:
+
+jobs:
+  comment:
+    name: Comment Bot
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: content
+          path: /tmp/content
+          run-id: ${{ github.event.workflow_run.id }}
+
+      - name: Read pr number
+        id: get_pr_number
+        run: |
+          echo "pr_number=$(cat /tmp/content/pr_number.txt)" >> $GITHUB_OUTPUT
+          rm /tmp/content/pr_number.txt
+
+      - name: Combine
+        id: combine
+        run: cat /tmp/contents/*.txt > /tmp/all.txt
+
+      - name: Find Comment
+        uses: peter-evans/find-comment@v3
+        id: fc
+        if: ${{ steps.get_pr_number.outputs.pr_number != null }}
+        with:
+          issue-number: ${{ steps.get_pr_number.outputs.pr_number }}
+          comment-author: "github-actions[bot]"
+
+      - name: Create or update pr comment
+        uses: peter-evans/create-or-update-comment@v4
+        if: ${{ steps.get_pr_number.outputs.pr_number != null }}
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ steps.get_pr_number.outputs.pr_number }}
+          body-file: /tmp/all.txt
+          edit-mode: replace
+
+      - name: Create or update commit comment
+        uses: peter-evans/commit-comment@v3
+        if: ${{ steps.get_pr_number.outputs.pr_number == null }}
+        with:
+          sha: ${{ github.event.workflow_run.head_sha }}
+          body-file: /tmp/all.txt
