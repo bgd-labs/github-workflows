@@ -42,7 +42,6 @@ jobs:
         with:
           name: content
           path: /tmp/content
-          run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ secrets.READ_ONLY_PAT || github.token }}
 
       - uses: bgd-labs/action-rpc-env@main
