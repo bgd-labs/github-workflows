@@ -24,7 +24,7 @@ jobs:
 
       - name: Combine
         id: combine
-        run: cat /tmp/contents/*.txt > /tmp/all.txt
+        run: cat /tmp/content/*.txt > /tmp/all.txt
 
       - name: Find Comment
         uses: peter-evans/find-comment@v3
