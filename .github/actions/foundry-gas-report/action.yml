@@ -16,6 +16,7 @@ runs:
 
     - name: Create backup
       if: steps.cache.outputs.cache-matched-key != ''
+      shell: bash
       run: |
         cd cache
         ls -l
@@ -24,9 +25,11 @@ runs:
 
     # required
     - name: Build
+      shell: bash
       run: forge build
 
     - name: Gas report
+      shell: bash
       run: forge test --fuzz-runs 1 --gas-report --json > cache/gas.json
 
     - uses: bgd-labs/action-foundry-gas-diff@main
