@@ -1,0 +1,41 @@
+name: Foundry lcov report
+description: Compares lcov on default branch against the pr
+
+runs:
+  using: "composite"
+  steps:
+    - name: Cache Restore
+      id: cache
+      uses: actions/cache/restore@6849a6489940f00c2f30c0fb92c6274307ccb58a # pin@v4
+      with:
+        path: cache
+        key: ${{ runner.os }}-bgd-foundry-lcov-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-bgd-foundry-lcov-
+          ${{ runner.os }}-
+
+    - uses: bgd-labs/action-foundry-lcov@main
+      id: lcov
+      with:
+        # The path to the first contract to compare
+        ROOT_REPORT_PATH: "cache/lcov.info"
+        # The path to the second contract to compare
+        REPORT_PATH: "lcov.info"
+
+    - name: Prepare comment
+      shell: bash
+      run: |
+        printf '%s' "${{ steps.lcov.outputs.report }}" > /tmp/content/lcov.txt
+
+    - name: Move lcov to cache
+      if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+      shell: bash
+      run: |
+        mv lcov.info cache/lcov.info
+
+    - name: Cache Save
+      if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+      uses: actions/cache/save@6849a6489940f00c2f30c0fb92c6274307ccb58a # pin@v4
+      with:
+        path: cache
+        key: ${{ runner.os }}-bgd-foundry-lcov-${{ github.sha }}
