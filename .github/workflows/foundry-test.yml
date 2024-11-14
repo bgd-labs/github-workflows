@@ -50,10 +50,6 @@ jobs:
           ROOT_DIR: ${{ inputs.ROOT_DIR }}
           ZKSYNC: ${{ inputs.zksync }}
 
-      - name: Run Gas report
-        if: ${{ inputs.mode == 'ALL'}}
-        uses: bgd-labs/github-workflows/.github/actions/foundry-gas-report@main
-
       - name: Save PR number
         if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
         env:
