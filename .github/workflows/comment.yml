@@ -1,4 +1,8 @@
 # By calling this ci via `workflow_call` from another ci it has permissions to comment on prs from forks
+# This action expects the a artifact named `content` to be present in the workflow run
+# If the artifact contains a pr_number.txt, the action will comment on that pr. If not it comments on the commit.
+# The content of the messages composed by concatinating all *.txt files within content into a single file
+# If you want to enforce a specific order, you need to name the files in a way that sorts in the desired order
 name: comment-pr-results
 
 on:

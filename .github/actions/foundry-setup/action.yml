@@ -1,0 +1,35 @@
+name: Foundry setup
+description: A generalized foundry setup doing common things, like building and emitting a version.
+inputs:
+  ZKSYNC:
+    description: "If tests should use zksync profile"
+    default: "false"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Make empty dir content tmp dir
+      shell: bash
+      run: mkdir -p /tmp/content
+
+    - name: Install Foundry
+      if: ${{ !inputs.zksync }}
+      uses: foundry-rs/foundry-toolchain@v1
+      with:
+        version: nightly
+
+    - name: Install Foundry zksync
+      if: ${{ inputs.zksync }}
+      uses: bgd-labs/foundry-zksync-toolchain@340cea9a42119d9a77a6bb0a8236d4311582b709
+      with:
+        version: nightly
+
+    - name: Run Forge build
+      shell: bash
+      run: |
+        forge --version | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' | tee /tmp/foundry_version ; test ${PIPESTATUS[0]} -eq 0
+        forge cache ls
+        ${{ inputs.zksync && 'FOUNDRY_PROFILE=zksync' || '' }} forge build --sizes ${{ inputs.zksync && '--zksync' || ''}} | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' | tee /tmp/foundry_build ; test ${PIPESTATUS[0]} -eq 0
+        printf '```shell\n%s\n```\n' "$(cat /tmp/foundry_version)" >> /tmp/content/0_version.txt
+        printf '<details><summary>Build log</summary>\n\n```shell\n%s\n```\n</details>\n' "$(cat /tmp/foundry_build)" >> /tmp/content/1_build.txt
+      id: build
