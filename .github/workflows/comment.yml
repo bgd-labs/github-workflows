@@ -74,4 +74,4 @@ jobs:
         with:
           token: ${{ secrets.READ_ONLY_PAT || github.token }}
           sha: ${{ github.event.workflow_run.head_sha }}
-          body-file: /tmp/comment
+          body-path: /tmp/comment
