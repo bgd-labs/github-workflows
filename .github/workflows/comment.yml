@@ -40,7 +40,7 @@ jobs:
           name: content
           path: /tmp/content
           run-id: ${{ github.event.workflow_run.id }}
-          github-token: ${{ secrets.READ_ONLY_PAT }}
+          github-token: ${{ secrets.READ_ONLY_PAT || github.token }}
 
       - name: Combine
         id: combine
@@ -53,6 +53,7 @@ jobs:
         id: fc
         if: ${{ steps.get_pr_number.outputs.pr_number != null }}
         with:
+          token: ${{ secrets.READ_ONLY_PAT || github.token }}
           issue-number: ${{ steps.get_pr_number.outputs.pr_number }}
           comment-author: "github-actions[bot]"
           body-includes: <!-- ${{ matrix.artifact }} -->
@@ -61,6 +62,7 @@ jobs:
         uses: peter-evans/create-or-update-comment@v4
         if: ${{ steps.get_pr_number.outputs.pr_number != null }}
         with:
+          token: ${{ secrets.READ_ONLY_PAT || github.token }}
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ steps.get_pr_number.outputs.pr_number }}
           body-file: /tmp/comment
@@ -70,5 +72,6 @@ jobs:
         uses: peter-evans/commit-comment@v3
         if: ${{ steps.get_pr_number.outputs.pr_number == null }}
         with:
+          token: ${{ secrets.READ_ONLY_PAT || github.token }}
           sha: ${{ github.event.workflow_run.head_sha }}
           body-file: /tmp/comment
