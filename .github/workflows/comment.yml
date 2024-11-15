@@ -51,20 +51,20 @@ jobs:
       - name: Find Comment
         uses: peter-evans/find-comment@v3
         id: fc
-        if: ${{ steps.get_pr_number.outputs.pr_number != null }}
+        if: ${{ needs.artifacts.outputs.pr_number != null }}
         with:
           token: ${{ secrets.READ_ONLY_PAT || github.token }}
-          issue-number: ${{ steps.get_pr_number.outputs.pr_number }}
+          issue-number: ${{ needs.artifacts.outputs.pr_number }}
           comment-author: "github-actions[bot]"
           body-includes: <!-- ${{ matrix.artifact }} -->
 
       - name: Create or update pr comment
         uses: peter-evans/create-or-update-comment@v4
-        if: ${{ steps.get_pr_number.outputs.pr_number != null }}
+        if: ${{ needs.artifacts.outputs.pr_number != null }}
         with:
           token: ${{ secrets.READ_ONLY_PAT || github.token }}
           comment-id: ${{ steps.fc.outputs.comment-id }}
-          issue-number: ${{ steps.get_pr_number.outputs.pr_number }}
+          issue-number: ${{ needs.artifacts.outputs.pr_number }}
           body-file: /tmp/comment
           edit-mode: replace
 
