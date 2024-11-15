@@ -42,8 +42,7 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ secrets.READ_ONLY_PAT || github.token }}
 
-      - name: Combine
-        id: combine
+      - name: Prepare comment
         run: |
           echo "<!-- ${{ matrix.artifact }} -->" > /tmp/comment
           cat ${{ matrix.artifact }} >> /tmp/comment
@@ -68,7 +67,7 @@ jobs:
 
       - name: Create or update commit comment
         uses: peter-evans/commit-comment@v3
-        if: ${{ steps.get_pr_number.outputs.pr_number == null }}
+        if: ${{ needs.artifacts.outputs.pr_number == null }}
         with:
           sha: ${{ github.event.workflow_run.head_sha }}
           body-path: /tmp/comment
