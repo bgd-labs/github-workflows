@@ -1,0 +1,19 @@
+name: "Comment artifact"
+description: "Storing the artifacts required for the generalized comment bot"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Save PR number
+      shell: bash
+      if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
+      env:
+        PR_NUMBER: ${{ github.event.number }}
+      run: |
+        mkdir -p ./pr
+        echo $PR_NUMBER > /tmp/content/pr_number.txt
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: content
+        path: /tmp/content

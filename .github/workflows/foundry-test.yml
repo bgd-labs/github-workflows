@@ -50,21 +50,8 @@ jobs:
           ROOT_DIR: ${{ inputs.ROOT_DIR }}
           ZKSYNC: ${{ inputs.zksync }}
 
-      - name: Save PR number
-        if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
-        env:
-          PR_NUMBER: ${{ github.event.number }}
-        run: |
-          mkdir -p ./pr
-          echo $PR_NUMBER > /tmp/content/pr_number.txt
-
-      - uses: actions/upload-artifact@v4
-        if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
-        with:
-          name: content
-          path: /tmp/content
-          # overwrite as we sometimes run this job multiple times (once for zksync, once for the rest)
-          overwrite: true
+      - name: Run Forge tests
+        uses: bgd-labs/github-workflows/.github/actions/comment-artifact@main
 
       # we let failing tests pass so we can log them in the comment, still we want the ci to fail
       - name: Post test

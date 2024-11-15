@@ -9,9 +9,31 @@ on:
   workflow_call:
 
 jobs:
+  artifacts:
+    name: Generate artifacts matrix
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      pr_number: ${{ steps.set-matrix.outputs.pr_number }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: content
+          path: /tmp/content
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.READ_ONLY_PAT }}
+      - id: set-matrix
+        run: |
+          echo "pr_number=$(cat /tmp/content/pr_number.txt)" >> $GITHUB_OUTPUT
+          rm /tmp/content/pr_number.txt
+          echo "matrix=$(ls /tmp/content/*.txt | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
   comment:
+    needs: artifacts
     name: Comment Bot
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        artifact: ${{ fromJson(needs.artifacts.outputs.matrix) }}
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -20,15 +42,11 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ secrets.READ_ONLY_PAT }}
 
-      - name: Read pr number
-        id: get_pr_number
-        run: |
-          echo "pr_number=$(cat /tmp/content/pr_number.txt)" >> $GITHUB_OUTPUT
-          rm /tmp/content/pr_number.txt
-
       - name: Combine
         id: combine
-        run: cat /tmp/content/*.txt > /tmp/all.txt
+        run: |
+          echo "<!-- ${{ matrix.artifact }} -->" > /tmp/comment
+          cat ${{ matrix.artifact }} >> /tmp/comment
 
       - name: Find Comment
         uses: peter-evans/find-comment@v3
@@ -37,6 +55,7 @@ jobs:
         with:
           issue-number: ${{ steps.get_pr_number.outputs.pr_number }}
           comment-author: "github-actions[bot]"
+          body-includes: <!-- ${{ matrix.artifact }} -->
 
       - name: Create or update pr comment
         uses: peter-evans/create-or-update-comment@v4
@@ -44,7 +63,7 @@ jobs:
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ steps.get_pr_number.outputs.pr_number }}
-          body-file: /tmp/all.txt
+          body-file: /tmp/comment
           edit-mode: replace
 
       - name: Create or update commit comment
@@ -52,4 +71,4 @@ jobs:
         if: ${{ steps.get_pr_number.outputs.pr_number == null }}
         with:
           sha: ${{ github.event.workflow_run.head_sha }}
-          body-file: /tmp/all.txt
+          body-file: /tmp/comment
