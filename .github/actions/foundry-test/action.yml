@@ -29,7 +29,7 @@ runs:
       run: |
         ${{ inputs.ZKSYNC == 'true' && 'FOUNDRY_PROFILE=zksync' || '' }} forge test ${{ inputs.zksync == 'true' && '--zksync' || ''}} -vv | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' | tee /tmp/foundry_test
         status=${PIPESTATUS[0]}
-        echo "testStatus=$status" >> $GITHUB_ENV
+        echo "testStatus=$status" >> $GITHUB_OUTPUT
         printf '<details><summary>%s <strong>Test Results ${{ inputs.zksync == 'true' && 'zksync' || '' }}</strong></summary>\n\n```shell\n%s\n```\n</details>' "$([ $status -eq 0 ] && echo ":rainbow:" || echo ":finnadie::x:")" "$(cat /tmp/foundry_test)" >> /tmp/content/test.txt
 
     # in changed mode we need to get all changed test(*.t.sol) files and run tests on them specifically
@@ -67,6 +67,6 @@ runs:
             status=1
           fi
         done
-        echo "testStatus=$status" >> $GITHUB_ENV
+        echo "testStatus=$status" >> $GITHUB_OUTPUT
         printf '<details><summary>%s<strong>Test Results</strong></summary>\n%s</details>' "$([ $status -eq 0 ] && echo ":rainbow:" || echo ":finnadie::x:")" "$(cat /tmp/foundry_test)" >> /tmp/content/test.txt
         exit 0
