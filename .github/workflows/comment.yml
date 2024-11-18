@@ -7,6 +7,10 @@ name: comment-pr-results
 
 on:
   workflow_call:
+    secrets:
+      READ_ONLY_PAT:
+        required: false
+        description: "If supplied PAT will be used for git checkout"
 
 jobs:
   artifacts:
