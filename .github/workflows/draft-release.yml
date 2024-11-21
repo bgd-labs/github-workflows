@@ -7,7 +7,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -16,10 +16,7 @@ jobs:
           git config --global user.email "gitbot@bgdlabs.com"
           git config --global user.name "Release bot :robot:"
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 20
-          cache: "npm"
+      - uses: bgd-labs/github-workflows/.github/actions/setup-node@main
 
       - name: install
         run: npm i -g standard-version
