@@ -13,6 +13,11 @@ inputs:
     description: "If tests should use zksync profile"
     default: "false"
 
+outputs:
+  testStatus:
+    description: "The test result"
+    value: ${{ steps.all.outputs.testStatus || steps.changed.outputs.testStatus || 0 }}
+
 runs:
   using: "composite"
   steps:
@@ -24,6 +29,7 @@ runs:
 
     # in all mode we simply run all tests
     - name: Test All
+      id: all
       if: ${{ inputs.MODE == 'ALL' }}
       shell: bash
       run: |
@@ -50,6 +56,7 @@ runs:
         cat .github/outputs/all_changed_files.json
 
     - name: Test Changed
+      id: changed
       if: ${{ inputs.MODE == 'CHANGED' && steps.changed-files.outputs.any_changed == 'true' }}
       shell: bash
       run: |
