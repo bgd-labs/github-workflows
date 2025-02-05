@@ -1,4 +1,4 @@
-# Test seup used to test the ci within this repository
+# Test setup used to test the ci within this repository
 name: Comment Test Results
 
 concurrency:
@@ -14,3 +14,5 @@ on:
 jobs:
   test:
     uses: ./.github/workflows/comment.yml
+    secrets:
+      READ_ONLY_PAT: ${{ secrets.READ_ONLY_PAT }}
