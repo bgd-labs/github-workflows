@@ -27,6 +27,7 @@ jobs:
     env:
       FOUNDRY_PROFILE: ci
     steps:
+      
       - uses: actions/checkout@v4
         with:
           submodules: recursive
@@ -51,7 +52,8 @@ jobs:
           ROOT_DIR: ${{ inputs.ROOT_DIR }}
           ZKSYNC: ${{ inputs.zksync }}
 
-      - name: Run Forge tests
+      - name: Upload & Trigger Comment artifact
+        if: always()
         uses: bgd-labs/github-workflows/.github/actions/comment-artifact@main
 
       # we let failing tests pass so we can log them in the comment, still we want the ci to fail
