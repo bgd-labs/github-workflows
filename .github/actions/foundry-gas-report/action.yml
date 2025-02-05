@@ -4,44 +4,10 @@ description: Compares gas on default branch against the pr
 runs:
   using: "composite"
   steps:
-    - name: Cache Restore
-      id: cache
-      uses: actions/cache/restore@6849a6489940f00c2f30c0fb92c6274307ccb58a # pin@v4
-      with:
-        path: cache
-        key: ${{ runner.os }}-bgd-foundry-gas-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-bgd-foundry-gas-
-          ${{ runner.os }}-
-
-    - name: Create backup
-      if: steps.cache.outputs.cache-matched-key != ''
-      shell: bash
-      run: |
-        mkdir -p cache
-        cp cache/gas.json cache/gas.backup.json || :
-
-    - name: Gas report
-      shell: bash
-      run: forge test --fuzz-runs 1 --gas-report --json > cache/gas.json
-
     - uses: bgd-labs/action-foundry-gas-diff@main
       id: gas
-      with:
-        # The path to the first contract to compare
-        ROOT_REPORT_PATH: "cache/gas.backup.json"
-        # The path to the second contract to compare
-        REPORT_PATH: "cache/gas.json"
-        ignoreUnchanged: "true"
 
     - name: Prepare comment
       shell: bash
       run: |
-        printf '%s' "${{ steps.gas.outputs.report }}" > /tmp/content/gas.txt
-
-    - name: Cache Save
-      if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
-      uses: actions/cache/save@6849a6489940f00c2f30c0fb92c6274307ccb58a # pin@v4
-      with:
-        path: cache
-        key: ${{ runner.os }}-bgd-foundry-gas-${{ github.sha }}
+        printf '%s' "${{ steps.gas.outputs.report }}<!-- gas-report -->" > /tmp/content/gas.txt
