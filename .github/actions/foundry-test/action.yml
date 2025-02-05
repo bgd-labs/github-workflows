@@ -46,13 +46,14 @@ runs:
 
     - name: Upload sizes report
       uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4
+      if: always()
       with:
         name: sizes-report
         path: /tmp/sizes.json
 
     - name: Compare reports
       uses: bgd-labs/action-forge-sizes@main
-      if: ${{ github.event_name == 'pull_request' }}
+      if: always() && github.event_name == 'pull_request'
       id: sizes
       with:
         comment: false
@@ -60,7 +61,7 @@ runs:
         report-path: /tmp/sizes.json
 
     - name: Prepare reports comment
-      if: ${{ github.event_name == 'pull_request' }}
+      if: always() && github.event_name == 'pull_request'
       shell: bash
       run: |
         printf '%s' "${{ steps.sizes.outputs.report }}" > /tmp/content/forge-sizes.txt
