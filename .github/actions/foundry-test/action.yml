@@ -52,10 +52,16 @@ runs:
         path: /tmp/sizes.json
 
     - uses: bgd-labs/action-forge-sizes@main
+      id: sizes
       with:
         comment: false
         base-report-path: /tmp/sizes.base.json
         report-path: /tmp/sizes.json
+
+    - name: Prepare comment
+      shell: bash
+      run: |
+        printf '%s' "${{ steps.sizes.outputs.report }}" > /tmp/content/forge-sizes.txt
 
     # in all mode we simply run all tests
     - name: Test All

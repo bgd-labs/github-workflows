@@ -1,4 +1,4 @@
-# Test seup used to test the ci within this repository
+# Test setup used to test the ci within this repository
 name: Comment Test Results
 
 concurrency:

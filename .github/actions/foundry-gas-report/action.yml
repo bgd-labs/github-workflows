@@ -10,4 +10,4 @@ runs:
     - name: Prepare comment
       shell: bash
       run: |
-        printf '%s' "${{ steps.gas.outputs.report }}<!-- gas-report -->" > /tmp/content/gas.txt
+        printf '%s' "${{ steps.gas.outputs.report }}" > /tmp/content/gas.txt
