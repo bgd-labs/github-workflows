@@ -23,8 +23,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
 
       - uses: ./.github/actions/setup-node
 
@@ -55,27 +53,31 @@ jobs:
           QUICKNODE_TOKEN: ${{ secrets.QUICKNODE_TOKEN }}
           QUICKNODE_ENDPOINT_NAME: ${{ secrets.QUICKNODE_ENDPOINT_NAME }}
 
-      - uses: ./.github/actions/setup-node
+      - uses: bgd-labs/github-workflows/.github/actions/setup-node@main
 
       - name: Run Foundry setup
-        uses: ./.github/actions/foundry-setup
+        uses: bgd-labs/github-workflows/.github/actions/foundry-setup@main
         with:
           # In this default action we always install zksync as it can be used for zkEVM and EVM
           ZKSYNC: true
 
       - name: Run Forge tests
         id: test
-        uses: ./.github/actions/foundry-test
+        uses: bgd-labs/github-workflows/.github/actions/foundry-size@main
+
+      - name: Run Forge tests
+        id: test
+        uses: bgd-labs/github-workflows/.github/actions/foundry-test@main
         with:
           MODE: ${{ inputs.mode }}
 
       - name: Run ZK tests
         id: zktest
-        uses: ./.github/actions/foundry-test
+        uses: bgd-labs/github-workflows/.github/actions/foundry-test@main
         with:
           MODE: ${{ inputs.mode }}
           ZKSYNC: true
 
       - name: Upload & Trigger Comment artifact
         if: always()
-        uses: ./.github/actions/comment-artifact
+        uses: bgd-labs/github-workflows/.github/actions/comment-artifact@main
