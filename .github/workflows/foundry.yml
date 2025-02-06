@@ -42,6 +42,7 @@ jobs:
     env:
       FOUNDRY_PROFILE: ci
     steps:
+      ### Setup ###
       - uses: actions/checkout@v4
         with:
           submodules: recursive
@@ -61,10 +62,15 @@ jobs:
           # In this default action we always install zksync as it can be used for zkEVM and EVM
           ZKSYNC: true
 
-      - name: Run Forge tests
+      ### Ensure contract size is not exceeded ###
+      - name: Run Forge size
         id: test
         uses: bgd-labs/github-workflows/.github/actions/foundry-size@main
 
+      - name: Run Gas report
+        uses: bgd-labs/github-workflows/.github/actions/foundry-gas-report@main
+
+      ### Run tests ###
       - name: Run Forge tests
         id: test
         uses: bgd-labs/github-workflows/.github/actions/foundry-test@main
@@ -77,6 +83,10 @@ jobs:
         with:
           MODE: ${{ inputs.mode }}
           ZKSYNC: true
+
+      ### Extended reports ###
+      - name: Run Lcov report
+        uses: bgd-labs/github-workflows/.github/actions/foundry-lcov-report@main
 
       - name: Upload & Trigger Comment artifact
         if: always()
