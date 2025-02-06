@@ -4,9 +4,6 @@ inputs:
   MODE:
     description: "Test ALL or CHANGED tests only"
     default: "ALL"
-  ROOT_DIR:
-    description: "The root folder to look for tests"
-    default: "src"
   # this will be a string even if type is boolean
   # github actions bug from 2021 https://github.com/actions/runner/issues/2238
   ZKSYNC:
@@ -86,7 +83,7 @@ runs:
         json: true
         write_output_files: true
         files: |
-          ${{ inputs.ROOT_DIR }}/**/*.t.sol
+          ${{ inputs.ZKSYNC == 'true' && 'zksync' || 'src' }}/**/*.t.sol
 
     - name: Run step if any *.md file(s) change
       if: ${{ inputs.MODE == 'CHANGED' && steps.changed-files.outputs.any_changed == 'true'}}
