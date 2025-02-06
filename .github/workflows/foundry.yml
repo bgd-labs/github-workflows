@@ -6,6 +6,9 @@ on:
       mode:
         default: "ALL"
         type: "string"
+      zksync:
+        default: false
+        type: boolean
     secrets:
       ALCHEMY_API_KEY:
         required: false
@@ -60,7 +63,7 @@ jobs:
         uses: bgd-labs/github-workflows/.github/actions/foundry-setup@main
         with:
           # In this default action we always install zksync as it can be used for zkEVM and EVM
-          ZKSYNC: true
+          ZKSYNC: ${{ inputs.zksync == 'true' }}
 
       ### Ensure contract size is not exceeded ###
       - name: Run Forge size
@@ -78,6 +81,7 @@ jobs:
 
       - name: Run ZK tests
         id: zktest
+        if: ${{ inputs.zksync == 'true' }}
         uses: bgd-labs/github-workflows/.github/actions/foundry-test@main
         with:
           MODE: ${{ inputs.mode }}
