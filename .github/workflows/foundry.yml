@@ -1,0 +1,82 @@
+name: foundry
+
+on:
+  workflow_call:
+    inputs:
+      mode:
+        default: "ALL"
+        type: "string"
+    secrets:
+      ALCHEMY_API_KEY:
+        required: false
+      READ_ONLY_PAT:
+        required: false
+        description: "If supplied PAT will be used for git checkout(relevant for private repos)"
+      QUICKNODE_TOKEN:
+        required: false
+      QUICKNODE_ENDPOINT_NAME:
+        required: false
+
+jobs:
+  lint:
+    name: Lint code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: ./.github/actions/setup-node
+
+      - id: lint
+        run: npm run lint
+  # forge fmt is quite buggy and does not support our style guidelines yet
+  # lint:
+  #   name: Lint code
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Run Forge fmt
+  #       run: forge fmt --check
+  #       id: fmt
+  test:
+    name: Foundry build n test
+    runs-on: ubuntu-latest
+    env:
+      FOUNDRY_PROFILE: ci
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.READ_ONLY_PAT || github.token }}
+
+      - uses: bgd-labs/action-rpc-env@f56d90aa2505822c6c81a9242625551b68b4859f
+        if: secrets.ALCHEMY_API_KEY || (secrets.QUICKNODE_TOKEN && secrets.QUICKNODE_ENDPOINT_NAME)
+        with:
+          ALCHEMY_API_KEY: ${{ secrets.ALCHEMY_API_KEY }}
+          QUICKNODE_TOKEN: ${{ secrets.QUICKNODE_TOKEN }}
+          QUICKNODE_ENDPOINT_NAME: ${{ secrets.QUICKNODE_ENDPOINT_NAME }}
+
+      - uses: .github/actions/setup-node
+
+      - name: Run Foundry setup
+        uses: .github/actions/foundry-setup
+        with:
+          # In this default action we always install zksync as it can be used for zkEVM and EVM
+          ZKSYNC: true
+
+      - name: Run Forge tests
+        id: test
+        uses: .github/actions/foundry-test
+        with:
+          MODE: ${{ inputs.mode }}
+
+      - name: Run ZK tests
+        id: zktest
+        uses: .github/actions/foundry-test
+        with:
+          MODE: ${{ inputs.mode }}
+          ZKSYNC: true
+
+      - name: Upload & Trigger Comment artifact
+        if: always()
+        uses: bgd-labs/github-workflows/.github/actions/comment-artifact@main
