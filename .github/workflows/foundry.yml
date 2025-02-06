@@ -79,4 +79,4 @@ jobs:
 
       - name: Upload & Trigger Comment artifact
         if: always()
-        uses: bgd-labs/github-workflows/.github/actions/comment-artifact@main
+        uses: .github/actions/comment-artifact
