@@ -64,7 +64,6 @@ jobs:
 
       ### Ensure contract size is not exceeded ###
       - name: Run Forge size
-        id: test
         uses: bgd-labs/github-workflows/.github/actions/foundry-size@main
 
       - name: Run Gas report
