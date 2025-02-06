@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: ./.github/actions/setup-node
+      - uses: bgd-labs/github-workflows/.github/actions/setup-node
 
       - id: lint
         run: npm run lint
