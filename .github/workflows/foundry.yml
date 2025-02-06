@@ -56,7 +56,7 @@ jobs:
           QUICKNODE_TOKEN: ${{ secrets.QUICKNODE_TOKEN }}
           QUICKNODE_ENDPOINT_NAME: ${{ secrets.QUICKNODE_ENDPOINT_NAME }}
 
-      - uses: .github/actions/setup-node
+      - uses: ./.github/actions/setup-node
 
       - name: Run Foundry setup
         uses: ./.github/actions/foundry-setup
