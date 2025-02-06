@@ -50,7 +50,6 @@ jobs:
           token: ${{ secrets.READ_ONLY_PAT || github.token }}
 
       - uses: bgd-labs/action-rpc-env@f56d90aa2505822c6c81a9242625551b68b4859f
-        if: ${{ secrets.ALCHEMY_API_KEY || (secrets.QUICKNODE_TOKEN && secrets.QUICKNODE_ENDPOINT_NAME) }}
         with:
           ALCHEMY_API_KEY: ${{ secrets.ALCHEMY_API_KEY }}
           QUICKNODE_TOKEN: ${{ secrets.QUICKNODE_TOKEN }}
