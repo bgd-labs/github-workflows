@@ -23,8 +23,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
 
       - uses: ./.github/actions/setup-node
 
@@ -44,39 +42,52 @@ jobs:
     env:
       FOUNDRY_PROFILE: ci
     steps:
+      ### Setup ###
       - uses: actions/checkout@v4
         with:
           submodules: recursive
           token: ${{ secrets.READ_ONLY_PAT || github.token }}
 
       - uses: bgd-labs/action-rpc-env@f56d90aa2505822c6c81a9242625551b68b4859f
-        if: secrets.ALCHEMY_API_KEY || (secrets.QUICKNODE_TOKEN && secrets.QUICKNODE_ENDPOINT_NAME)
         with:
           ALCHEMY_API_KEY: ${{ secrets.ALCHEMY_API_KEY }}
           QUICKNODE_TOKEN: ${{ secrets.QUICKNODE_TOKEN }}
           QUICKNODE_ENDPOINT_NAME: ${{ secrets.QUICKNODE_ENDPOINT_NAME }}
 
-      - uses: ./.github/actions/setup-node
+      - uses: bgd-labs/github-workflows/.github/actions/setup-node@main
 
       - name: Run Foundry setup
-        uses: ./.github/actions/foundry-setup
+        uses: bgd-labs/github-workflows/.github/actions/foundry-setup@main
         with:
           # In this default action we always install zksync as it can be used for zkEVM and EVM
           ZKSYNC: true
 
+      ### Ensure contract size is not exceeded ###
+      - name: Run Forge size
+        id: test
+        uses: bgd-labs/github-workflows/.github/actions/foundry-size@main
+
+      - name: Run Gas report
+        uses: bgd-labs/github-workflows/.github/actions/foundry-gas-report@main
+
+      ### Run tests ###
       - name: Run Forge tests
         id: test
-        uses: ./.github/actions/foundry-test
+        uses: bgd-labs/github-workflows/.github/actions/foundry-test@main
         with:
           MODE: ${{ inputs.mode }}
 
       - name: Run ZK tests
         id: zktest
-        uses: ./.github/actions/foundry-test
+        uses: bgd-labs/github-workflows/.github/actions/foundry-test@main
         with:
           MODE: ${{ inputs.mode }}
           ZKSYNC: true
 
+      ### Extended reports ###
+      - name: Run Lcov report
+        uses: bgd-labs/github-workflows/.github/actions/foundry-lcov-report@main
+
       - name: Upload & Trigger Comment artifact
         if: always()
-        uses: ./.github/actions/comment-artifact
+        uses: bgd-labs/github-workflows/.github/actions/comment-artifact@main
