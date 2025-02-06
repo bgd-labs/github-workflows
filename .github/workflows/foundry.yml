@@ -59,24 +59,24 @@ jobs:
       - uses: .github/actions/setup-node
 
       - name: Run Foundry setup
-        uses: .github/actions/foundry-setup
+        uses: ./.github/actions/foundry-setup
         with:
           # In this default action we always install zksync as it can be used for zkEVM and EVM
           ZKSYNC: true
 
       - name: Run Forge tests
         id: test
-        uses: .github/actions/foundry-test
+        uses: ./.github/actions/foundry-test
         with:
           MODE: ${{ inputs.mode }}
 
       - name: Run ZK tests
         id: zktest
-        uses: .github/actions/foundry-test
+        uses: ./.github/actions/foundry-test
         with:
           MODE: ${{ inputs.mode }}
           ZKSYNC: true
 
       - name: Upload & Trigger Comment artifact
         if: always()
-        uses: .github/actions/comment-artifact
+        uses: ./.github/actions/comment-artifact
