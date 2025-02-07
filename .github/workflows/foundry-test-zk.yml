@@ -1,0 +1,70 @@
+name: foundry test zk
+
+on:
+  workflow_call:
+    inputs:
+      mode:
+        default: "ALL"
+        type: "string"
+    secrets:
+      ALCHEMY_API_KEY:
+        required: false
+      READ_ONLY_PAT:
+        required: false
+        description: "If supplied PAT will be used for git checkout(relevant for private repos)"
+      QUICKNODE_TOKEN:
+        required: false
+      QUICKNODE_ENDPOINT_NAME:
+        required: false
+
+jobs:
+  test:
+    name: Foundry build n test
+    runs-on: ubuntu-latest
+    env:
+      FOUNDRY_PROFILE: ci
+    steps:
+      ### Setup ###
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.READ_ONLY_PAT || github.token }}
+
+      - uses: bgd-labs/action-rpc-env@f56d90aa2505822c6c81a9242625551b68b4859f
+        with:
+          ALCHEMY_API_KEY: ${{ secrets.ALCHEMY_API_KEY }}
+          QUICKNODE_TOKEN: ${{ secrets.QUICKNODE_TOKEN }}
+          QUICKNODE_ENDPOINT_NAME: ${{ secrets.QUICKNODE_ENDPOINT_NAME }}
+
+      - uses: bgd-labs/github-workflows/.github/actions/setup-node@main
+
+      - name: Run Foundry setup
+        uses: bgd-labs/github-workflows/.github/actions/foundry-setup@main
+        with:
+          ZKSYNC: true
+
+      ### Run tests ###
+      - name: Run ZK tests
+        id: zktest
+        if: ${{ inputs.zksync == 'true' }}
+        uses: bgd-labs/github-workflows/.github/actions/foundry-test@main
+        with:
+          MODE: ${{ inputs.mode }}
+          ZKSYNC: true
+
+      - name: Upload & Trigger Comment artifact
+        if: always()
+        uses: bgd-labs/github-workflows/.github/actions/comment-artifact@main
+        with:
+          name: "zk"
+
+      - uses: actions/upload-artifact/merge@v4
+        if: always()
+        with:
+          # The name of the artifact that the artifacts will be merged into
+          # Optional. Default is 'merged-artifacts'
+          name: "content"
+
+          # A glob pattern matching the artifacts that should be merged.
+          # Optional. Default is '*'
+          pattern: "content*"
