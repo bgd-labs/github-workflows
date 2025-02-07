@@ -20,12 +20,15 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
       pr_number: ${{ steps.set-matrix.outputs.pr_number }}
     steps:
-      - uses: actions/download-artifact@v4
+      - name: Download artifacts
+        uses: dawidd6/action-download-artifact@72aaadce3bc708349fc665eee3785cbb1b6e51d0 # v3.1.1
         with:
-          name: content
+          run_id: ${{ github.event.workflow_run.id }}
+          github_token: ${{ secrets.READ_ONLY_PAT || github.token }}
+          name: content*
+          name_is_regexp: true
           path: /tmp/content
-          run-id: ${{ github.event.workflow_run.id }}
-          github-token: ${{ secrets.READ_ONLY_PAT }}
+
       - id: set-matrix
         run: |
           if [ -f "/tmp/content/pr_number.txt" ] ; then
@@ -41,12 +44,14 @@ jobs:
       matrix:
         artifact: ${{ fromJson(needs.artifacts.outputs.matrix) }}
     steps:
-      - uses: actions/download-artifact@v4
+      - name: Download artifacts
+        uses: dawidd6/action-download-artifact@72aaadce3bc708349fc665eee3785cbb1b6e51d0 # v3.1.1
         with:
-          name: content
+          run_id: ${{ github.event.workflow_run.id }}
+          github_token: ${{ secrets.READ_ONLY_PAT || github.token }}
+          name: content*
+          name_is_regexp: true
           path: /tmp/content
-          run-id: ${{ github.event.workflow_run.id }}
-          github-token: ${{ secrets.READ_ONLY_PAT || github.token }}
 
       - name: Prepare comment
         run: |
