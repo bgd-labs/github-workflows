@@ -35,7 +35,7 @@ jobs:
           if test -n "$pr_number"
           then
               echo "pr_number=$(cat $pr_number)"
-              rm $pr_number
+              rm /tmp/content/**/pr_number.txt
           fi
           echo "matrix=$(ls /tmp/content/**/*.txt | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
   comment:
