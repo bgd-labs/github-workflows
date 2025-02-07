@@ -1,0 +1,16 @@
+name: Foundry Lint
+
+on:
+  workflow_call:
+
+jobs:
+  lint:
+    name: Lint code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: bgd-labs/github-workflows/.github/actions/setup-node@main
+
+      - id: lint
+        run: npm run lint

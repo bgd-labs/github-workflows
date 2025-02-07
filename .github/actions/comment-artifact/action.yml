@@ -1,5 +1,9 @@
 name: "Comment artifact"
 description: "Storing the artifacts required for the generalized comment bot"
+inputs:
+  nameSuffix:
+    description: "Name of the artifact"
+    default: ""
 
 runs:
   using: "composite"
@@ -15,5 +19,5 @@ runs:
 
     - uses: actions/upload-artifact@v4
       with:
-        name: content
+        name: content${{ inputs.name }}
         path: /tmp/content
