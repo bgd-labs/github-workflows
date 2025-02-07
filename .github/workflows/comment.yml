@@ -31,9 +31,9 @@ jobs:
 
       - id: set-matrix
         run: |
-          if [ -f "/tmp/content/pr_number.txt" ] ; then
+          if [ -f "/tmp/content/**/pr_number.txt" ] ; then
               echo "pr_number=$(cat /tmp/content/**/pr_number.txt)" >> $GITHUB_OUTPUT
-              rm /tmp/content/pr_number.txt
+              rm /tmp/content/**/pr_number.txt
           fi
           echo "matrix=$(ls /tmp/content/**/*.txt | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
   comment:
