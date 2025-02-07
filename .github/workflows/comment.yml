@@ -31,7 +31,7 @@ jobs:
 
       - id: set-matrix
         run: |
-          pr_number=$(find /tmp/content/* -maxdepth 2 -name 'pr-number.txt' -print -quit)
+          pr_number=$(find /tmp/content/* -maxdepth 2 -name 'pr_number.txt' -print -quit)
           if test -n "$pr_number"
           then
               echo "pr_number=$(cat $pr_number)"
