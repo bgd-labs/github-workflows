@@ -56,4 +56,4 @@ jobs:
         if: always()
         uses: bgd-labs/github-workflows/.github/actions/comment-artifact@main
         with:
-          name: "zk"
+          nameSuffix: "zk"
