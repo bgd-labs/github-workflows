@@ -71,6 +71,7 @@ jobs:
         uses: peter-evans/create-or-update-comment@v4
         if: ${{ needs.artifacts.outputs.pr_number != null }}
         with:
+          token: ${{ secrets.READ_ONLY_PAT || github.token }}
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ needs.artifacts.outputs.pr_number }}
           body-file: /tmp/comment
@@ -80,5 +81,6 @@ jobs:
         uses: peter-evans/commit-comment@v3
         if: ${{ needs.artifacts.outputs.pr_number == null }}
         with:
+          token: ${{ secrets.READ_ONLY_PAT || github.token }}
           sha: ${{ github.event.workflow_run.head_sha }}
           body-path: /tmp/comment
