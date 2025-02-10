@@ -14,4 +14,4 @@ jobs:
         uses: bgd-labs/github-workflows/.github/actions/foundry-setup@main
 
       - name: lint
-        run: foundry fmt --check
+        run: forge fmt --check
