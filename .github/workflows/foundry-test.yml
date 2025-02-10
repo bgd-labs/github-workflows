@@ -40,9 +40,6 @@ jobs:
 
       - name: Run Foundry setup
         uses: bgd-labs/github-workflows/.github/actions/foundry-setup@main
-        with:
-          # In this default action we always install zksync as it can be used for zkEVM and EVM
-          ZKSYNC: ${{ inputs.zksync == 'true' }}
 
       ### Ensure contract size is not exceeded ###
       - name: Run Forge size

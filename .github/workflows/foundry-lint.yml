@@ -1,0 +1,17 @@
+name: Foundry Lint
+
+on:
+  workflow_call:
+
+jobs:
+  lint:
+    name: Lint code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Foundry setup
+        uses: bgd-labs/github-workflows/.github/actions/foundry-setup@main
+
+      - name: lint
+        run: foundry fmt --check
