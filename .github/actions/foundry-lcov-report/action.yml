@@ -12,6 +12,7 @@ runs:
         name: lcov-report
         if_no_artifact_found: warn
         path: lcov
+        check_artifacts: true
 
     - uses: bgd-labs/action-foundry-lcov@main
       id: lcov

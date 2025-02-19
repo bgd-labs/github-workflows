@@ -12,6 +12,7 @@ runs:
         name: sizes-report
         if_no_artifact_found: warn
         path: /tmp/
+        check_artifacts: true
 
     - name: Generate Report
       shell: bash
