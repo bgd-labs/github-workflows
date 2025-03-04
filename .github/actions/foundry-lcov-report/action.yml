@@ -1,6 +1,11 @@
 name: Foundry lcov report
 description: Compares lcov on default branch against the pr
 
+inputs:
+  CODECOV_TOKEN:
+    description: "Codecov token"
+    required: false
+
 runs:
   using: "composite"
   steps:
@@ -25,7 +30,7 @@ runs:
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v5
       with:
-        token: ${{ secrets.CODECOV_TOKEN }}
+        token: ${{ inputs.CODECOV_TOKEN }}
         slug: bgd-labs/aave-v3-origin
         files: ./lcov.info
 
