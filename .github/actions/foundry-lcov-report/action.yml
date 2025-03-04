@@ -28,7 +28,6 @@ runs:
         printf '%s' "${{ steps.lcov.outputs.report }}" > /tmp/content/lcov.txt
 
     - name: Move lcov to cache
-      if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
       shell: bash
       run: |
         mkdir -p lcov
