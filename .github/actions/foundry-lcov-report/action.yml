@@ -31,7 +31,7 @@ runs:
       uses: codecov/codecov-action@v5
       with:
         token: ${{ inputs.CODECOV_TOKEN }}
-        slug: bgd-labs/aave-v3-origin
+        slug: ${{ github.repository }}
         files: ./lcov.info
 
     - name: Prepare comment
