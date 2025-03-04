@@ -22,6 +22,13 @@ runs:
         # The path to the second contract to compare
         REPORT_PATH: "lcov.info"
 
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v5
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        slug: bgd-labs/aave-v3-origin
+        files: ./lcov.info
+
     - name: Prepare comment
       shell: bash
       run: |
