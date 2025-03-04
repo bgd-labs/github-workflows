@@ -1,11 +1,6 @@
 name: Foundry lcov report
 description: Compares lcov on default branch against the pr
 
-inputs:
-  CODECOV_TOKEN:
-    description: "Codecov token"
-    required: false
-
 runs:
   using: "composite"
   steps:
@@ -27,13 +22,6 @@ runs:
         # The path to the second contract to compare
         REPORT_PATH: "lcov.info"
 
-    - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v5
-      with:
-        token: ${{ inputs.CODECOV_TOKEN }}
-        slug: ${{ github.repository }}
-        files: ./lcov.info
-
     - name: Prepare comment
       shell: bash
       run: |
@@ -50,4 +38,4 @@ runs:
       uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4
       with:
         name: lcov-report
-        path: lcov
+        path: lcov/lcov.info
