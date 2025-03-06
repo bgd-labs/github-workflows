@@ -69,7 +69,7 @@ runs:
     - name: Install (pnpm)
       if: ${{ env.PACKAGE_MANAGER == 'pnpm' }}
       shell: bash
-      run: pnpm i --prefer-offline --no-audit
+      run: pnpm i --prefer-offline --frozen-lockfile
 
     ### Bun
     - name: Determine Runtime-Version (bun)
