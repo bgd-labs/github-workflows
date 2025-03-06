@@ -46,6 +46,9 @@ runs:
           echo "NODE_VERSION_FILE=.nvmrc" >> $GITHUB_ENV
         fi
 
+    - uses: pnpm/action-setup@v2
+      if: ${{ env.PACKAGE_MANAGER == 'pnpm' }}
+
     - name: Setup Node.js
       uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # pin@v4
       with:
