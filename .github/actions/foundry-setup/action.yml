@@ -4,6 +4,12 @@ inputs:
   ZKSYNC:
     description: "If tests should use zksync profile"
     default: "false"
+  FOUNDRY_VERSION:
+    description: "The version of Foundry to install"
+    options:
+      - "nightly"
+      - "stable"
+    default: "nightly"
 
 runs:
   using: "composite"
@@ -16,7 +22,7 @@ runs:
       if: ${{ !inputs.zksync }}
       uses: foundry-rs/foundry-toolchain@v1
       with:
-        version: nightly
+        version: ${{ inputs.FOUNDRY_VERSION }}
 
     - name: Install Foundry zksync
       if: ${{ inputs.zksync }}

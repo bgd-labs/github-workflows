@@ -9,6 +9,9 @@ inputs:
   ZKSYNC:
     description: "If tests should use zksync profile"
     default: "false"
+  FORGE_SNAPSHOT_CHECK:
+    description: "If gas snapshot check should be run"
+    default: "false"
 
 outputs:
   testStatus:
@@ -28,6 +31,8 @@ runs:
         status=${PIPESTATUS[0]}
         echo "testStatus=$status" >> $GITHUB_OUTPUT
         printf '<details><summary>%s <strong>Test Results ${{ inputs.zksync == 'true' && 'zksync' || '' }}</strong></summary>\n\n```shell\n%s\n```\n</details>' "$([ $status -eq 0 ] && echo ":rainbow:" || echo ":finnadie::x:")" "$(cat /tmp/foundry_test)" >> /tmp/content/test.txt
+      env:
+        FORGE_SNAPSHOT_CHECK: ${{ inputs.FORGE_SNAPSHOT_CHECK }}
 
     # in changed mode we need to get all changed test(*.t.sol) files and run tests on them specifically
     - name: Get all changed *.t.sol file(s)
@@ -68,3 +73,5 @@ runs:
         echo "testStatus=$status" >> $GITHUB_OUTPUT
         printf '<details><summary>%s<strong>Test Results</strong></summary>\n%s</details>' "$([ $status -eq 0 ] && echo ":rainbow:" || echo ":finnadie::x:")" "$(cat /tmp/foundry_test)" >> /tmp/content/test.txt
         exit 0
+      env:
+        FORGE_SNAPSHOT_CHECK: ${{ inputs.FORGE_SNAPSHOT_CHECK }}
