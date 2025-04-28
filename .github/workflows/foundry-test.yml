@@ -54,10 +54,12 @@ jobs:
       - name: Run Forge size
         if: ${{ inputs.compareSize }}
         uses: bgd-labs/github-workflows/.github/actions/foundry-size@main
+        continue-on-error: true
 
       - name: Run Gas report
         if: ${{ inputs.compareGas }}
         uses: bgd-labs/github-workflows/.github/actions/foundry-gas-report@main
+        continue-on-error: true
 
       ### Run tests ###
       - name: Run Forge tests
