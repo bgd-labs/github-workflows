@@ -19,13 +19,13 @@ runs:
       run: mkdir -p /tmp/content
 
     - name: Install Foundry
-      if: ${{ !inputs.zksync }}
+      if: ${{ inputs.zksync != 'true' }}
       uses: foundry-rs/foundry-toolchain@v1
       with:
         version: ${{ inputs.FOUNDRY_VERSION }}
 
     - name: Install Foundry zksync
-      if: ${{ inputs.zksync }}
+      if: ${{ inputs.zksync == 'true' }}
       uses: bgd-labs/foundry-zksync-toolchain@340cea9a42119d9a77a6bb0a8236d4311582b709
       with:
         version: nightly
