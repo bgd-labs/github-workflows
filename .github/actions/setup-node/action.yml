@@ -26,6 +26,10 @@ runs:
             echo "PACKAGE_MANAGER=bun" >> $GITHUB_ENV
         fi
 
+        if [ -f bun.lock ]; then
+            echo "PACKAGE_MANAGER=bun" >> $GITHUB_ENV
+        fi
+
     - name: Determine Runtime-Version (node)
       if: ${{ env.PACKAGE_MANAGER != '' }}
       shell: bash
