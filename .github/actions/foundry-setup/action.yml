@@ -20,13 +20,13 @@ runs:
 
     - name: Install Foundry
       if: ${{ inputs.zksync != 'true' }}
-      uses: foundry-rs/foundry-toolchain@v1
+      uses: foundry-rs/foundry-toolchain@v1.4.0
       with:
         version: ${{ inputs.FOUNDRY_VERSION }}
 
     - name: Install Foundry zksync
       if: ${{ inputs.zksync == 'true' }}
-      uses: bgd-labs/foundry-zksync-toolchain@340cea9a42119d9a77a6bb0a8236d4311582b709
+      uses: bgd-labs/foundry-zksync-toolchain@f7fa458f4f0d94dfdeb1759e7842e3b8e1c97a8d
       with:
         version: nightly
 
