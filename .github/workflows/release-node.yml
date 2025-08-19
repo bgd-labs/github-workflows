@@ -6,6 +6,11 @@ on:
     secrets:
       NODE_AUTH_TOKEN:
         required: true
+    inputs:
+      path:
+        required: false
+        type: string
+        default: '.'
 
 jobs:
   release:
@@ -21,5 +26,6 @@ jobs:
 
       - name: Publish
         run: npm publish
+        working-directory: ${{ inputs.path }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
