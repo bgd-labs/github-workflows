@@ -62,9 +62,9 @@ jobs:
     uses: bgd-labs/github-workflows/.github/workflows/draft-release.yml@main
 ```
 
-## Release / Release-node
+## Release-node
 
-`release` and `release-node` actions are intended to be used with `draft-release`.
+The `release-node` action is intended to be used with `draft-release`.
 Instead of relying on manual dispatch this action is intended to be used on default branch merges only.
 
 The workflows will listen for the commit message created by `draft-release` and then perform their release tasks.
@@ -76,7 +76,6 @@ The workflows will listen for the commit message created by `draft-release` and 
 `release-node` workflow:
 
 - creates a node release
-- the repository **MUST** use `yarn` as it's package manager
 - the repository **MUST** specify a `ci:publish` step which facilitates [building and publishing](https://github.com/bgd-labs/aave-address-book/blob/main/package.json#L17)
 
 ```yml
@@ -86,8 +85,6 @@ on:
       - main
 
 jobs:
-  release:
-    uses: bgd-labs/github-workflows/.github/workflows/release.yml@main
   release-node:
     uses: bgd-labs/github-workflows/.github/workflows/release-node.yml@main
     secrets:
