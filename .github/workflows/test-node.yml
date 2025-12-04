@@ -34,6 +34,8 @@ on:
         required: false
       ETHERSCAN_API_KEY:
         required: false
+      EXPLORER_PROXY:
+        required: false
 
 jobs:
   release:
@@ -51,3 +53,4 @@ jobs:
         run: npm run test
         env:
           ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+          EXPLORER_PROXY: ${{ secrets.EXPLORER_PROXY }}
