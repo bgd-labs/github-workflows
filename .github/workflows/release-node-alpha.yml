@@ -5,7 +5,7 @@ on:
   workflow_call:
     secrets:
       NODE_AUTH_TOKEN:
-        required: true
+        required: false
 
 jobs:
   release-alpha:
