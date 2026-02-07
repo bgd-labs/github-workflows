@@ -21,8 +21,6 @@ jobs:
   test:
     name: Foundry build n test
     runs-on: ubuntu-latest
-    env:
-      FOUNDRY_PROFILE: ci
     steps:
       ### Setup ###
       - uses: actions/checkout@v4
