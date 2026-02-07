@@ -20,7 +20,7 @@ runs:
 
     - name: Install Foundry
       if: ${{ inputs.zksync != 'true' }}
-      uses: foundry-rs/foundry-toolchain@v1.4.0
+      uses: foundry-rs/foundry-toolchain@8789b3e21e6c11b2697f5eb56eddae542f746c10
       with:
         version: ${{ inputs.FOUNDRY_VERSION }}
 
