@@ -37,6 +37,15 @@ jobs:
           submodules: recursive
           token: ${{ secrets.READ_ONLY_PAT || github.token }}
 
+      - name: Increase swapfile
+        run: |
+          sudo swapoff -a
+          sudo fallocate -l 15G /swapfile
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+          sudo swapon /swapfile
+          sudo swapon --show
+
       - uses: bgd-labs/action-rpc-env@f56d90aa2505822c6c81a9242625551b68b4859f
         with:
           ALCHEMY_API_KEY: ${{ secrets.ALCHEMY_API_KEY }}
