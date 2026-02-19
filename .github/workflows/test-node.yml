@@ -32,6 +32,8 @@ on:
         required: false
       RPC_FANTOM:
         required: false
+      ALCHEMY_API_KEY:
+        required: false
       ETHERSCAN_API_KEY:
         required: false
       EXPLORER_PROXY:
