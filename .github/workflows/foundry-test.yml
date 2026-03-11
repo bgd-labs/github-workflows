@@ -46,7 +46,7 @@ jobs:
           sudo swapon /swapfile
           sudo swapon --show
 
-      - uses: bgd-labs/action-rpc-env@2aeedfbcac1b2d763ba1f7f6dbc258d3d9a76d05
+      - uses: bgd-labs/action-rpc-env@5191193b0de7443bda94b6f42092c83e32464adc
         with:
           ALCHEMY_API_KEY: ${{ secrets.ALCHEMY_API_KEY }}
           QUICKNODE_TOKEN: ${{ secrets.QUICKNODE_TOKEN }}
